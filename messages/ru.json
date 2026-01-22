@@ -1,0 +1,12 @@
+{
+    "$schema": "https://inlang.com/schema/inlang-message-format",
+    "hero_firstName": "Артемий",
+    "hero_lastName": "Аверьянов",
+    "hero_role_prefix": "Front-End Developer. Создаю",
+    "hero_role_highlight1": "красивые",
+    "hero_role_conjunction": "и",
+    "hero_role_highlight2": "функциональные",
+    "hero_role_suffix": "интерфейсы.",
+    "hero_projects_btn": "Смотреть проекты",
+    "hero_contact_btn": "Связаться со мной"
+}
