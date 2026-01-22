@@ -9,7 +9,7 @@ export function Stack()
     const marqueeStack = [...TECH_STACK, ...TECH_STACK, ...TECH_STACK]
 
     return (
-        <section className="py-40 px-4 relative overflow-hidden border-y border-white/5 bg-white/5 backdrop-blur-sm">
+        <section className="py-12 px-4 relative overflow-hidden border-y border-white/5 bg-white/5 backdrop-blur-sm">
             {/* Decor */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
 
