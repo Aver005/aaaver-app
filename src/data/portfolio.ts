@@ -29,11 +29,18 @@ export const TECH_STACK = [
   'React',
   'TypeScript',
   'Vite',
+  'Bun',
   'DaisyUI',
   'ShadCN',
-  'TanStack Start',
+  'TanStack',
   'Elysia',
-  'Bun'
+  'Zustand',
+  'Framer Motion',
+  'Drizzle',
+  'Lucide Icons',
+  'Zod',
+  'Tailwind',
+  'ESLint'
 ] as const
 
 export const FAQ_ITEMS = [

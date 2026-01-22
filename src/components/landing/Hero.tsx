@@ -7,18 +7,18 @@ export function Hero()
     return (
         <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-20">
             {/* Background Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
             {/* Background blobs - more complex */}
             <div className="absolute top-1/4 left-1/4 h-96 w-96 animate-pulse rounded-full bg-indigo-600/20 blur-[128px]" />
             <div className="absolute bottom-1/4 right-1/4 h-96 w-96 animate-pulse rounded-full bg-cyan-600/20 blur-[128px] delay-1000" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-violet-600/10 blur-[100px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-125 w-125 rounded-full bg-violet-600/10 blur-[100px]" />
 
             <div className="relative z-10 max-w-4xl text-center">
                 <Reveal>
                     <div className="relative inline-block">
                         <h1 className="relative mb-12 text-5xl font-bold tracking-tight text-white sm:text-7xl">
-                            Артемий <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400 animate-gradient-x">Аверьянов</span>
+                            Артемий <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-violet-400 to-cyan-400 animate-gradient-x">Аверьянов</span>
                         </h1>
                     </div>
                 </Reveal>
@@ -36,7 +36,7 @@ export function Hero()
                             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
                         >
                             <span className="relative z-10">Смотреть проекты</span>
-                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-in-out" />
+                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-in-out" />
                         </Button>
                         <Button variant="soft" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
                             Связаться со мной

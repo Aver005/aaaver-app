@@ -1,14 +1,16 @@
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react';
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
 
-interface RevealProps {
+interface RevealProps
+{
   children: ReactNode
   className?: string
   delay?: number
 }
 
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
+export function Reveal({ children, className, delay = 0 }: RevealProps)
+{
   const { ref, isVisible } = useScrollReveal()
 
   return (
