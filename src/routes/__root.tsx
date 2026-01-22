@@ -34,11 +34,41 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             {
                 title: 'Артемий | aaaver.ru',
             },
+            {
+                name: 'author',
+                content: 'Артемий',
+            },
+            {
+                name: 'robots',
+                content: 'index, follow',
+            },
+            {
+                property: 'og:site_name',
+                content: 'aaaver.ru',
+            },
+            {
+                property: 'og:locale',
+                content: getLocale(),
+            },
         ],
         links: [
             {
                 rel: 'stylesheet',
                 href: css,
+            },
+            {
+                rel: 'icon',
+                type: 'image/x-icon',
+                href: '/favicon.ico',
+            },
+            {
+                rel: 'apple-touch-icon',
+                sizes: '180x180',
+                href: '/logo192.png',
+            },
+            {
+                rel: 'canonical',
+                href: 'https://aaaver.ru',
             },
         ],
     }),
