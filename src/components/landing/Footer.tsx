@@ -1,83 +1,159 @@
+import { useState } from 'react'
+import { CheckCircle2, Github, Loader2, Mail, Send } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Reveal } from '@/components/ui/Reveal'
-import { Github, Mail, Send } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export function Footer()
 {
-    const handleSubmit = (e: React.FormEvent) =>
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent) =>
     {
         e.preventDefault()
-        alert('Спасибо за сообщение! (Демо режим)')
+        setIsSubmitting(true)
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500))
+
+        setIsSubmitting(false)
+        setIsSuccess(true)
+
+        // Reset success state after 3 seconds
+        setTimeout(() => setIsSuccess(false), 3000)
     }
 
     return (
-        <footer id="contact" className="py-24 px-4 pb-10">
-            <div className="mx-auto max-w-4xl">
+        <footer id="contact" className="py-40 px-4 pb-20 relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 h-[500px] w-[800px] rounded-full bg-indigo-600/10 blur-[100px] pointer-events-none" />
+
+            <div className="mx-auto max-w-5xl relative z-10">
                 <Reveal>
-                    <div className="grid gap-12 md:grid-cols-2">
-                        <div>
-                            <h2 className="mb-6 text-3xl font-bold text-white">Контакты</h2>
-                            <p className="mb-8 text-white/70">
-                                Готов обсудить ваш проект или просто пообщаться.
-                                Пишите в любое время!
+                    <div className="grid gap-16 md:grid-cols-2 items-center">
+                        <div className="md:pr-8">
+                            <h2 className="mb-6 text-4xl font-bold text-white tracking-tight">
+                                Давайте создадим <br />
+                                <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">
+                                    что-то уникальное
+                                </span>
+                            </h2>
+                            <p className="mb-8 text-lg text-slate-300 leading-relaxed">
+                                Я всегда открыт для обсуждения новых идей и проектов.
+                                Напишите мне, и мы превратим вашу задумку в реальность.
                             </p>
 
-                            <div className="space-y-4">
-                                <a href="https://github.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-white/80 hover:text-indigo-400 transition-colors">
-                                    <Github className="h-5 w-5" />
-                                    <span>GitHub</span>
+                            <div className="space-y-6">
+                                <a href="https://github.com" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-indigo-500/10">
+                                    <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
+                                        <Github className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <div className="font-medium text-white">GitHub</div>
+                                        <div className="text-sm text-white/50">Посмотрите мой код</div>
+                                    </div>
                                 </a>
-                                <a href="https://t.me" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-white/80 hover:text-indigo-400 transition-colors">
-                                    <Send className="h-5 w-5" />
-                                    <span>Telegram</span>
+
+                                <a href="https://t.me" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-cyan-500/10">
+                                    <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
+                                        <Send className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <div className="font-medium text-white">Telegram</div>
+                                        <div className="text-sm text-white/50">Быстрая связь</div>
+                                    </div>
                                 </a>
-                                <a href="mailto:hello@example.com" className="flex items-center gap-3 text-white/80 hover:text-indigo-400 transition-colors">
-                                    <Mail className="h-5 w-5" />
-                                    <span>Email</span>
+
+                                <a href="mailto:hello@example.com" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-pink-500/10">
+                                    <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
+                                        <Mail className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <div className="font-medium text-white">Email</div>
+                                        <div className="text-sm text-white/50">Для официальных запросов</div>
+                                    </div>
                                 </a>
                             </div>
                         </div>
 
-                        <GlassCard>
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                <div>
-                                    <label className="mb-2 block text-sm text-white/70">Имя</label>
+                        <GlassCard className="relative overflow-hidden border-white/10 bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 shadow-2xl shadow-indigo-500/20">
+                            <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
+                                <div className="group relative">
                                     <input
                                         type="text"
+                                        id="name"
                                         required
-                                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder-white/30 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                        placeholder="Иван Иванов"
+                                        className="peer w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-transparent focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                                        placeholder="Имя"
                                     />
+                                    <label
+                                        htmlFor="name"
+                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:top-[-10px] peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
+                                    >
+                                        Ваше имя
+                                    </label>
                                 </div>
-                                <div>
-                                    <label className="mb-2 block text-sm text-white/70">Email</label>
+
+                                <div className="group relative">
                                     <input
                                         type="email"
+                                        id="email"
                                         required
-                                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder-white/30 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                        placeholder="ivan@example.com"
+                                        className="peer w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-transparent focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                                        placeholder="Email"
                                     />
+                                    <label
+                                        htmlFor="email"
+                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:top-[-10px] peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
+                                    >
+                                        Email адрес
+                                    </label>
                                 </div>
-                                <div>
-                                    <label className="mb-2 block text-sm text-white/70">Сообщение</label>
+
+                                <div className="group relative">
                                     <textarea
+                                        id="message"
                                         rows={4}
                                         required
-                                        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder-white/30 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                        placeholder="Привет, хочу обсудить проект..."
+                                        className="peer w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-transparent focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                                        placeholder="Сообщение"
                                     />
+                                    <label
+                                        htmlFor="message"
+                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:top-[-10px] peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
+                                    >
+                                        Опишите вашу задачу
+                                    </label>
                                 </div>
-                                <Button type="submit" className="w-full">
-                                    Отправить
+
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting || isSuccess}
+                                    className={cn(
+                                        "w-full h-12 text-lg font-medium transition-all duration-300",
+                                        isSuccess ? "bg-emerald-600 hover:bg-emerald-700" : "bg-indigo-600 hover:bg-indigo-700"
+                                    )}
+                                >
+                                    {isSubmitting ? (
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                    ) : isSuccess ? (
+                                        <span className="flex items-center gap-2">
+                                            <CheckCircle2 className="h-5 w-5" />
+                                            Отправлено!
+                                        </span>
+                                    ) : (
+                                        "Обсудить проект"
+                                    )}
                                 </Button>
                             </form>
                         </GlassCard>
                     </div>
                 </Reveal>
 
-                <div className="mt-20 text-center text-sm text-white/30">
-                    © {new Date().getFullYear()} Artemiy Averyanov. All rights reserved.
+                <div className="mt-24 border-t border-white/5 pt-8 text-center text-sm text-white/30">
+                    <p>© {new Date().getFullYear()} Artemiy Averyanov. Разработано с любовью к деталям.</p>
                 </div>
             </div>
         </footer>

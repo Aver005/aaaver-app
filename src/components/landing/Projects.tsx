@@ -10,9 +10,10 @@ const GRADIENTS = [
   'from-violet-500/20 to-purple-500/20',
 ]
 
-export function Projects() {
+export function Projects()
+{
   return (
-    <section id="projects" className="py-24 px-4 relative">
+    <section id="projects" className="py-40 px-4 relative">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <h2 className="mb-12 text-center text-4xl font-bold text-white tracking-tight">
@@ -23,17 +24,17 @@ export function Projects() {
         <div className="grid gap-8 md:grid-cols-2">
           {PROJECTS.map((project, index) => (
             <Reveal key={project.title} delay={index * 100}>
-              <GlassCard 
-                hoverEffect 
-                className="h-full flex flex-col justify-between group cursor-pointer border-white/5 bg-slate-900/40" 
+              <GlassCard
+                hoverEffect
+                className="h-full flex flex-col justify-between group cursor-pointer border-white/5 bg-slate-900/40"
                 onClick={() => window.open(project.url, '_blank')}
               >
                 {/* Abstract Visual Placeholder */}
                 <div className={`mb-6 h-48 w-full rounded-xl bg-gradient-to-br ${GRADIENTS[index % GRADIENTS.length]} p-6 relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500`}>
-                   <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiLz4KPC9zdmc+')] opacity-20" />
-                   <div className="absolute bottom-4 right-4 rounded-full bg-white/10 p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                     <ArrowUpRight className="h-6 w-6 text-white" />
-                   </div>
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiLz4KPC9zdmc+')] opacity-20" />
+                  <div className="absolute bottom-4 right-4 rounded-full bg-white/10 p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <ArrowUpRight className="h-6 w-6 text-white" />
+                  </div>
                 </div>
 
                 <div>
