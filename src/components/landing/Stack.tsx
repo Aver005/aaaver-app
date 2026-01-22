@@ -3,6 +3,7 @@ import { TechColors, TechIcons } from './TechIcons'
 import { Reveal } from '@/components/ui/Reveal'
 import { TECH_STACK } from '@/data/portfolio'
 import { cn } from '@/lib/utils'
+import * as m from '@/paraglide/messages'
 
 export function Stack()
 {
@@ -16,7 +17,7 @@ export function Stack()
             <div className="relative z-10 w-full overflow-hidden">
                 <Reveal>
                     <h2 className="mb-16 text-center text-4xl font-bold text-white tracking-tight">
-                        Мой <span className="text-indigo-400">Стек</span>
+                        {m.stack_title_prefix()} <span className="text-indigo-400">{m.stack_title_highlight()}</span>
                     </h2>
                 </Reveal>
 

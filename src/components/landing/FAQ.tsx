@@ -4,6 +4,7 @@ import { GlassCard } from '@/components/ui/GlassCard'
 import { Reveal } from '@/components/ui/Reveal'
 import { FAQ_ITEMS } from '@/data/portfolio'
 import { cn } from '@/lib/utils'
+import * as m from '@/paraglide/messages'
 
 export function FAQ()
 {
@@ -13,7 +14,7 @@ export function FAQ()
     <section className="py-40 px-4">
       <div className="mx-auto max-w-3xl">
         <Reveal>
-          <h2 className="mb-12 text-center text-3xl font-bold text-white">FAQ</h2>
+          <h2 className="mb-12 text-center text-3xl font-bold text-white">{m.faq_title()}</h2>
         </Reveal>
 
         <div className="space-y-4">

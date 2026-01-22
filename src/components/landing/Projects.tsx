@@ -2,6 +2,7 @@ import { ArrowUpRight, ExternalLink } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Reveal } from '@/components/ui/Reveal'
 import { PROJECTS } from '@/data/portfolio'
+import * as m from '@/paraglide/messages'
 
 const GRADIENTS = [
     'from-pink-500/20 to-rose-500/20',
@@ -17,7 +18,7 @@ export function Projects()
             <div className="mx-auto max-w-6xl">
                 <Reveal>
                     <h2 className="mb-12 text-center text-4xl font-bold text-white tracking-tight">
-                        Мои <span className="text-indigo-400">Проекты</span>
+                        {m.projects_title_prefix()} <span className="text-indigo-400">{m.projects_title_highlight()}</span>
                     </h2>
                 </Reveal>
 
