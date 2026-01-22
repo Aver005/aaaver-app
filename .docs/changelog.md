@@ -13,6 +13,13 @@
 - [x] Add scroll animations using `IntersectionObserver`
 - [x] Utility functions for class merging (`cn`)
 - [x] Data separation in `src/data/portfolio.ts`
+- [x] **Enriched UI (Visual Polish):**
+    - Added global noise texture overlay in `index.tsx`.
+    - Added background grid pattern in `Hero` section.
+    - Enhanced `GlassCard` with gradient borders, inner sheen effects, and micro-noise.
+    - Added abstract visual placeholders (gradients) for Projects cards.
+    - Improved typography and gradients in Hero section.
+    - Added floating decorative elements in Hero section.
 
 ### Notes
 - Used pure Tailwind CSS v4 for styling to avoid installing extra dependencies like `clsx` or `tailwind-merge` if they were missing (implemented simple replacement).
