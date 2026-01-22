@@ -1,6 +1,8 @@
 import { ArrowDownIcon } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Reveal } from '@/components/ui/Reveal'
+import * as m from '@/paraglide/messages'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 
 export function Hero()
 {
@@ -9,6 +11,10 @@ export function Hero()
             {/* Background Grid */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
+            <div className="absolute top-6 right-6 z-50">
+                <LanguageSwitcher />
+            </div>
+            
             {/* Background blobs - more complex */}
             <div className="absolute top-1/4 left-1/4 h-96 w-96 animate-pulse rounded-full bg-indigo-600/20 blur-[128px]" />
             <div className="absolute bottom-1/4 right-1/4 h-96 w-96 animate-pulse rounded-full bg-cyan-600/20 blur-[128px] delay-1000" />
@@ -18,14 +24,14 @@ export function Hero()
                 <Reveal>
                     <div className="relative inline-block">
                         <h1 className="relative mb-12 text-5xl font-bold tracking-tight text-white sm:text-7xl">
-                            Артемий <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-violet-400 to-cyan-400 animate-gradient-x">Аверьянов</span>
+                            {m.hero_firstName()} <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-violet-400 to-cyan-400 animate-gradient-x">{m.hero_lastName()}</span>
                         </h1>
                     </div>
                 </Reveal>
 
                 <Reveal delay={200}>
                     <p className="mb-8 text-xl text-slate-300 sm:text-2xl font-light tracking-wide">
-                        Front-End Developer. Создаю <span className="text-indigo-400 font-medium">красивые</span> и <span className="text-cyan-400 font-medium">функциональные</span> интерфейсы.
+                        {m.hero_role_prefix()} <span className="text-indigo-400 font-medium">{m.hero_role_highlight1()}</span> {m.hero_role_conjunction()} <span className="text-cyan-400 font-medium">{m.hero_role_highlight2()}</span> {m.hero_role_suffix()}
                     </p>
                 </Reveal>
 
@@ -35,11 +41,11 @@ export function Hero()
                             className="relative overflow-hidden group bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]"
                             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
                         >
-                            <span className="relative z-10">Смотреть проекты</span>
+                            <span className="relative z-10">{m.hero_projects_btn()}</span>
                             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-in-out" />
                         </Button>
                         <Button variant="soft" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                            Связаться со мной
+                            {m.hero_contact_btn()}
                         </Button>
                     </div>
                 </Reveal>
