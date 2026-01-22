@@ -46,12 +46,12 @@ export function Hero()
             </div>
 
             {/* Decorative floating elements */}
-            <div className="absolute top-20 left-10 hidden lg:block animate-bounce duration-[3000ms]">
+            <div className="absolute top-20 left-10 hidden lg:block animate-bounce duration-3000">
                 <div className="h-12 w-12 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
                     <ArrowDownIcon className='opacity-40 m-3' />
                 </div>
             </div>
-            <div className="absolute bottom-20 right-10 hidden lg:block animate-bounce duration-[4000ms] delay-700">
+            <div className="absolute bottom-20 right-10 hidden lg:block animate-bounce duration-4000 delay-700">
                 <div className="h-16 w-16 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
                     <ArrowDownIcon className='opacity-40 m-5' />
                 </div>

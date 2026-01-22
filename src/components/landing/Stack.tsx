@@ -11,7 +11,7 @@ export function Stack()
     return (
         <section className="py-12 px-4 relative overflow-hidden border-y border-white/5 bg-white/5 backdrop-blur-sm">
             {/* Decor */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-150 w-150 rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
 
             <div className="relative z-10 w-full overflow-hidden">
                 <Reveal>
@@ -20,7 +20,7 @@ export function Stack()
                     </h2>
                 </Reveal>
 
-                <div className="relative flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+                <div className="relative flex w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
                     <div className="flex animate-marquee gap-8 py-4 whitespace-nowrap">
                         {marqueeStack.map((tech, i) =>
                         {

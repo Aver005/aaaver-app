@@ -9,7 +9,6 @@ import
     Server,
     ShieldCheck,
     Terminal,
-    Type,
     Wind,
     Zap
   } from 'lucide-react'

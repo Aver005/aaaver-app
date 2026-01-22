@@ -28,7 +28,7 @@ export function Footer()
     return (
         <footer id="contact" className="py-40 px-4 pb-20 relative overflow-hidden">
             {/* Background Glow */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 h-[500px] w-[800px] rounded-full bg-indigo-600/10 blur-[100px] pointer-events-none" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 h-125 w-200 rounded-full bg-indigo-600/10 blur-[100px] pointer-events-none" />
 
             <div className="mx-auto max-w-5xl relative z-10">
                 <Reveal>
@@ -78,7 +78,7 @@ export function Footer()
                             </div>
                         </div>
 
-                        <GlassCard className="relative overflow-hidden border-white/10 bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 shadow-2xl shadow-indigo-500/20">
+                        <GlassCard className="relative overflow-hidden border-white/10 bg-linear-to-br from-slate-900/90 to-slate-800/90 p-8 shadow-2xl shadow-indigo-500/20">
                             <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
                                 <div className="group relative">
                                     <input
@@ -90,7 +90,7 @@ export function Footer()
                                     />
                                     <label
                                         htmlFor="name"
-                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:top-[-10px] peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
+                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
                                     >
                                         Ваше имя
                                     </label>
@@ -106,7 +106,7 @@ export function Footer()
                                     />
                                     <label
                                         htmlFor="email"
-                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:top-[-10px] peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
+                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
                                     >
                                         Email адрес
                                     </label>
@@ -122,7 +122,7 @@ export function Footer()
                                     />
                                     <label
                                         htmlFor="message"
-                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:top-[-10px] peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
+                                        className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
                                     >
                                         Опишите вашу задачу
                                     </label>
