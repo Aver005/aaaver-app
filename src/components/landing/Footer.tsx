@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Reveal } from '@/components/ui/Reveal'
 import { cn } from '@/lib/utils'
+import * as m from '@/paraglide/messages'
 
 export function Footer()
 {
@@ -35,14 +36,13 @@ export function Footer()
                     <div className="grid gap-16 md:grid-cols-2 items-center">
                         <div className="md:pr-8">
                             <h2 className="mb-6 text-4xl font-bold text-white tracking-tight">
-                                Давайте создадим <br />
+                                {m.footer_title_1()} <br />
                                 <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">
-                                    что-то уникальное
+                                    {m.footer_title_2()}
                                 </span>
                             </h2>
                             <p className="mb-8 text-lg text-slate-300 leading-relaxed">
-                                Я всегда открыт для обсуждения новых идей и проектов.
-                                Напишите мне, и мы превратим вашу задумку в реальность.
+                                {m.footer_subtitle()}
                             </p>
 
                             <div className="space-y-6">
@@ -52,7 +52,7 @@ export function Footer()
                                     </div>
                                     <div>
                                         <div className="font-medium text-white">GitHub</div>
-                                        <div className="text-sm text-white/50">Посмотрите мой код</div>
+                                        <div className="text-sm text-white/50">{m.footer_github_desc()}</div>
                                     </div>
                                 </a>
 
@@ -62,7 +62,7 @@ export function Footer()
                                     </div>
                                     <div>
                                         <div className="font-medium text-white">Telegram</div>
-                                        <div className="text-sm text-white/50">Быстрая связь</div>
+                                        <div className="text-sm text-white/50">{m.footer_telegram_desc()}</div>
                                     </div>
                                 </a>
 
@@ -72,7 +72,7 @@ export function Footer()
                                     </div>
                                     <div>
                                         <div className="font-medium text-white">Email</div>
-                                        <div className="text-sm text-white/50">Для официальных запросов</div>
+                                        <div className="text-sm text-white/50">{m.footer_email_desc()}</div>
                                     </div>
                                 </a>
                             </div>
@@ -86,13 +86,13 @@ export function Footer()
                                         id="name"
                                         required
                                         className="peer w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-transparent focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
-                                        placeholder="Имя"
+                                        placeholder={m.footer_form_name_placeholder()}
                                     />
                                     <label
                                         htmlFor="name"
                                         className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
                                     >
-                                        Ваше имя
+                                        {m.footer_form_name_label()}
                                     </label>
                                 </div>
 
@@ -102,13 +102,13 @@ export function Footer()
                                         id="email"
                                         required
                                         className="peer w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-transparent focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
-                                        placeholder="Email"
+                                        placeholder={m.footer_form_email_placeholder()}
                                     />
                                     <label
                                         htmlFor="email"
                                         className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
                                     >
-                                        Email адрес
+                                        {m.footer_form_email_label()}
                                     </label>
                                 </div>
 
@@ -118,13 +118,13 @@ export function Footer()
                                         rows={4}
                                         required
                                         className="peer w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-transparent focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
-                                        placeholder="Сообщение"
+                                        placeholder={m.footer_form_message_placeholder()}
                                     />
                                     <label
                                         htmlFor="message"
                                         className="absolute left-4 top-3 text-sm text-white/50 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/50 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:bg-slate-900 peer-focus:px-1 peer-focus:text-xs peer-focus:text-indigo-400 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:bg-slate-900 peer-[:not(:placeholder-shown)]:px-1 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-indigo-400"
                                     >
-                                        Опишите вашу задачу
+                                        {m.footer_form_message_label()}
                                     </label>
                                 </div>
 
@@ -141,10 +141,10 @@ export function Footer()
                                     ) : isSuccess ? (
                                         <span className="flex items-center gap-2">
                                             <CheckCircle2 className="h-5 w-5" />
-                                            Отправлено!
+                                            {m.footer_btn_success()}
                                         </span>
                                     ) : (
-                                        "Обсудить проект"
+                                        m.footer_btn_submit()
                                     )}
                                 </Button>
                             </form>
@@ -153,7 +153,7 @@ export function Footer()
                 </Reveal>
 
                 <div className="mt-24 border-t border-white/5 pt-8 text-center text-sm text-white/30">
-                    <p>© {new Date().getFullYear()} Artemiy Averyanov. Разработано с любовью к деталям.</p>
+                    <p>© {new Date().getFullYear()} {m.footer_copyright_text()}</p>
                 </div>
             </div>
         </footer>

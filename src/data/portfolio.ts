@@ -1,28 +1,30 @@
+import * as m from '@/paraglide/messages'
+
 export const PROJECTS = [
     {
         title: 'Pocacall',
-        description: 'Удобная платформа для видеозвонков без регистраций с приятным и отзывчивым интерфейсом.',
+        description: m.project_pocacall_desc(),
         url: 'https://pocacall.kiviuly.ru',
         tags: ['Video', 'WebRTC', 'UI/UX'],
         image: '/projects/pocacall.png'
     },
     {
         title: 'Order Maushi',
-        description: 'Минималистичный анимированный сайт для бронирования автоматизированных звукостудий.',
+        description: m.project_order_maushi_desc(),
         url: 'https://order.maushi.ru',
         tags: ['Booking', 'Animation', 'Minimalism'],
         image: '/projects/order-maushi.png'
     },
     {
         title: 'RtaTex',
-        description: 'Главный сайт компании РТА Технологии. Презентация услуг и команды.',
+        description: m.project_rtatex_desc(),
         url: 'https://rtatex.ru/',
         tags: ['Corporate', 'Presentation'],
         image: '/projects/rtatex.png'
     },
     {
         title: 'OtaScribe',
-        description: 'Продвинутое решение для транскрибации аудио и видео информации.',
+        description: m.project_otascribe_desc(),
         url: 'http://app.otascribe.ru',
         tags: ['AI', 'Transcription', 'Audio'],
         image: '/projects/otascribe.png'
@@ -49,15 +51,15 @@ export const TECH_STACK = [
 
 export const FAQ_ITEMS = [
     {
-        question: 'Какой стек вы используете?',
-        answer: 'В основном я работаю с React, TypeScript и Bun, используя современные инструменты вроде Vite и TanStack.'
+        question: m.faq_stack_q(),
+        answer: m.faq_stack_a()
     },
     {
-        question: 'Берете ли вы фриланс заказы?',
-        answer: 'Да, я открыт для интересных предложений. Свяжитесь со мной через форму ниже.'
+        question: m.faq_freelance_q(),
+        answer: m.faq_freelance_a()
     },
     {
-        question: 'Как с вами связаться?',
-        answer: 'Можно написать в Telegram или на почту. Контакты указаны в футере.'
+        question: m.faq_contact_q(),
+        answer: m.faq_contact_a()
     }
 ] as const
