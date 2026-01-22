@@ -33,7 +33,7 @@ export function Projects()
                 <div className={`mb-6 h-48 w-full rounded-xl bg-gradient-to-br ${GRADIENTS[index % GRADIENTS.length]} p-6 relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500`}>
                   <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiLz4KPC9zdmc+')] opacity-20" />
                   <div className="absolute bottom-4 right-4 rounded-full bg-white/10 p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowUpRight className="h-6 w-6 text-white" />
+                    <ArrowUpRight className="size-6 text-white" />
                   </div>
                 </div>
 
