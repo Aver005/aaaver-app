@@ -1,0 +1,24 @@
+{
+  "projectName": "aaaver-app",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "bun",
+  "tailwind": true,
+  "addOnOptions": {
+    "drizzle": {
+      "database": "postgresql"
+    }
+  },
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "nitro",
+    "start",
+    "drizzle",
+    "form",
+    "paraglide",
+    "tanstack-query"
+  ]
+}
