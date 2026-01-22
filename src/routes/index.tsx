@@ -4,9 +4,13 @@ import { Projects } from '@/components/landing/Projects'
 import { Stack } from '@/components/landing/Stack'
 import { FAQ } from '@/components/landing/FAQ'
 import { Footer } from '@/components/landing/Footer'
+import { getLandingData } from '@/lib/actions'
 
 export const Route = createFileRoute('/')({
     component: LandingPage,
+    loader: async () => {
+        return await getLandingData()
+    },
     head: () => ({
         meta: [
             {
@@ -78,6 +82,8 @@ export const Route = createFileRoute('/')({
 
 function LandingPage()
 {
+    const { faqs, stack, contacts } = Route.useLoaderData()
+
     return (
         <div className="min-h-screen w-full bg-slate-950 selection:bg-indigo-500/30 relative">
             {/* Global Noise Overlay */}
@@ -85,9 +91,9 @@ function LandingPage()
 
             <Hero />
             <Projects />
-            <Stack />
-            <FAQ />
-            <Footer />
+            <Stack items={stack} />
+            <FAQ items={faqs} />
+            <Footer contacts={contacts} />
         </div>
     )
 }
