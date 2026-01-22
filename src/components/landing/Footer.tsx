@@ -46,9 +46,9 @@ export function Footer()
                             </p>
 
                             <div className="space-y-6">
-                                <a href="https://github.com" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-indigo-500/10">
+                                <a href="https://github.com/aver005" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-indigo-500/10">
                                     <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
-                                        <Github className="h-6 w-6" />
+                                        <Github className="size-6" />
                                     </div>
                                     <div>
                                         <div className="font-medium text-white">GitHub</div>
@@ -56,9 +56,9 @@ export function Footer()
                                     </div>
                                 </a>
 
-                                <a href="https://t.me" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-cyan-500/10">
+                                <a href="https://t.me/aver005" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-cyan-500/10">
                                     <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
-                                        <Send className="h-6 w-6" />
+                                        <Send className="size-6" />
                                     </div>
                                     <div>
                                         <div className="font-medium text-white">Telegram</div>
@@ -66,9 +66,9 @@ export function Footer()
                                     </div>
                                 </a>
 
-                                <a href="mailto:hello@example.com" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-pink-500/10">
+                                <a href="mailto:aver.tema.005@ya.ru" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-pink-500/10">
                                     <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
-                                        <Mail className="h-6 w-6" />
+                                        <Mail className="size-6" />
                                     </div>
                                     <div>
                                         <div className="font-medium text-white">Email</div>

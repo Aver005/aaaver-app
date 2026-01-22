@@ -32,7 +32,7 @@ export function Stack()
                                     key={`${tech}-${i}`}
                                     className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-md transition-colors hover:bg-white/10 hover:border-indigo-500/30"
                                 >
-                                    <Icon className={cn("h-6 w-6", colorClass)} />
+                                    <Icon className={cn("size-6", colorClass)} />
                                     <span className="text-lg font-medium text-white/90">{tech}</span>
                                 </div>
                             )
