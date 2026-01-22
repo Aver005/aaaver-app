@@ -1,15 +1,35 @@
 import { useState } from 'react'
-import { CheckCircle2, Github, Loader2, Mail, Send } from 'lucide-react'
+import { CheckCircle2, Github, Link as LinkIcon, Loader2, Mail, Send } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Reveal } from '@/components/ui/Reveal'
-import { cn } from '@/lib/utils'
+import { cn, getLocalized } from '@/lib/utils'
 import * as m from '@/paraglide/messages'
+import { getLocale } from '@/paraglide/runtime'
 
-export function Footer()
+const ICON_MAP: Record<string, React.ElementType> = {
+    github: Github,
+    telegram: Send,
+    email: Mail,
+    default: LinkIcon
+}
+
+interface FooterProps
+{
+    contacts: Array<{
+        type: string
+        value: string
+        link: string
+        label: Record<string, string> | null
+        description: Record<string, string> | null
+    }>
+}
+
+export function Footer({ contacts }: FooterProps)
 {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
+    const locale = getLocale()
 
     const handleSubmit = async (e: React.FormEvent) =>
     {
@@ -46,35 +66,26 @@ export function Footer()
                             </p>
 
                             <div className="space-y-6">
-                                <a href="https://github.com/aver005" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-indigo-500/10">
-                                    <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
-                                        <Github className="size-6" />
-                                    </div>
-                                    <div>
-                                        <div className="font-medium text-white">GitHub</div>
-                                        <div className="text-sm text-white/50">{m.footer_github_desc()}</div>
-                                    </div>
-                                </a>
+                                {contacts.map((contact, i) =>
+                                {
+                                    const Icon = ICON_MAP[contact.type.toLowerCase()] ?? ICON_MAP.default
+                                    const hoverColor = contact.type === 'github' ? 'hover:shadow-indigo-500/10' :
+                                        contact.type === 'telegram' ? 'hover:shadow-cyan-500/10' :
+                                            contact.type === 'email' ? 'hover:shadow-pink-500/10' :
+                                                'hover:shadow-white/10'
 
-                                <a href="https://t.me/aver005" target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-cyan-500/10">
-                                    <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
-                                        <Send className="size-6" />
-                                    </div>
-                                    <div>
-                                        <div className="font-medium text-white">Telegram</div>
-                                        <div className="text-sm text-white/50">{m.footer_telegram_desc()}</div>
-                                    </div>
-                                </a>
-
-                                <a href="mailto:aver.tema.005@ya.ru" className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg hover:shadow-pink-500/10">
-                                    <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
-                                        <Mail className="size-6" />
-                                    </div>
-                                    <div>
-                                        <div className="font-medium text-white">Email</div>
-                                        <div className="text-sm text-white/50">{m.footer_email_desc()}</div>
-                                    </div>
-                                </a>
+                                    return (
+                                        <a key={i} href={contact.link} target={contact.type === 'email' ? undefined : "_blank"} rel="noreferrer" className={cn("group flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10 hover:border-white/10 hover:shadow-lg", hoverColor)}>
+                                            <div className="rounded-lg bg-white/10 p-2 text-white group-hover:scale-110 transition-transform">
+                                                <Icon className="size-6" />
+                                            </div>
+                                            <div>
+                                                <div className="font-medium text-white">{getLocalized(contact.label, locale) || contact.value}</div>
+                                                {contact.description && <div className="text-sm text-white/50">{getLocalized(contact.description, locale)}</div>}
+                                            </div>
+                                        </a>
+                                    )
+                                })}
                             </div>
                         </div>
 

@@ -1,13 +1,17 @@
 import { Box } from 'lucide-react'
 import { TechColors, TechIcons } from './TechIcons'
 import { Reveal } from '@/components/ui/Reveal'
-import { TECH_STACK } from '@/data/portfolio'
 import { cn } from '@/lib/utils'
 import * as m from '@/paraglide/messages'
 
-export function Stack()
+interface StackProps {
+    items: Array<{ name: string }>
+}
+
+export function Stack({ items }: StackProps)
 {
-    const marqueeStack = [...TECH_STACK, ...TECH_STACK, ...TECH_STACK]
+    const names = items.map(i => i.name)
+    const marqueeStack = [...names, ...names, ...names]
 
     return (
         <section className="py-12 px-4 relative overflow-hidden border-y border-white/5 bg-white/5 backdrop-blur-sm">
