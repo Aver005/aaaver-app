@@ -13,16 +13,20 @@ interface ProjectCardProps {
 /**
  * Крупная редакционная карточка: скриншот в полупогашенных тонах,
  * который «оживает» при наведении, и гигантский номер на подложке.
+ * Без url карточка не кликается (внутренние продукты без публичной ссылки).
  */
 export function ProjectCard({ project, index, reversed = false }: ProjectCardProps) {
     const { t, lx } = useI18n()
     const number = String(index + 1).padStart(2, '0')
 
+    const Root = (project.url ? 'a' : 'article') as 'a'
+    const linkProps = project.url
+        ? { href: project.url, target: '_blank', rel: 'noopener noreferrer' }
+        : {}
+
     return (
-        <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
+        <Root
+            {...linkProps}
             className="group relative grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-10"
         >
             <div
@@ -60,14 +64,16 @@ export function ProjectCard({ project, index, reversed = false }: ProjectCardPro
                     ))}
                 </div>
 
-                <span className="mt-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-paper-faint transition-colors duration-300 group-hover:text-ember">
-                    {t.projects.visit}
-                    <ArrowUpRight
-                        size={14}
-                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    />
-                </span>
+                {project.url && (
+                    <span className="mt-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-paper-faint transition-colors duration-300 group-hover:text-ember">
+                        {t.projects.visit}
+                        <ArrowUpRight
+                            size={14}
+                            className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        />
+                    </span>
+                )}
             </div>
-        </a>
+        </Root>
     )
 }

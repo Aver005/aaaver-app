@@ -2,6 +2,27 @@ import type { Project } from './types'
 
 export const PROJECTS: Project[] = [
     {
+        id: 'synapse-hub',
+        title: 'Synapse Hub',
+        image: '/projects/synapsehub.png',
+        description: {
+            ru: 'Локальное рабочее пространство для LLM: чаты с моделями на собственном железе — без внешних API, подписок и утечек данных. Приватность по умолчанию.',
+            en: 'A local LLM workspace: chat with models on your own hardware — no external APIs, subscriptions or data leaks. Private by default.',
+        },
+        tags: ['AI', 'LLM', 'React'],
+    },
+    {
+        id: 'otascribe',
+        title: 'OtaScribe',
+        url: 'http://app.otascribe.ru',
+        image: '/projects/otascribe.png',
+        description: {
+            ru: 'Сервис транскрибации аудио и видео: загрузил запись — получил текст с таймкодами.',
+            en: 'An audio & video transcription service: upload a recording, get text with timecodes.',
+        },
+        tags: ['AI', 'Transcription', 'Audio'],
+    },
+    {
         id: 'pocacall',
         title: 'Pocacall',
         url: 'https://pocacall.kiviuly.ru',
@@ -33,16 +54,5 @@ export const PROJECTS: Project[] = [
             en: 'The main website of RTA Technologies: products, services and the team.',
         },
         tags: ['Corporate', 'Presentation'],
-    },
-    {
-        id: 'otascribe',
-        title: 'OtaScribe',
-        url: 'http://app.otascribe.ru',
-        image: '/projects/otascribe.png',
-        description: {
-            ru: 'Сервис транскрибации аудио и видео: загрузил запись — получил текст с таймкодами.',
-            en: 'An audio & video transcription service: upload a recording, get text with timecodes.',
-        },
-        tags: ['AI', 'Transcription', 'Audio'],
     },
 ]

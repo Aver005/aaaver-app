@@ -23,14 +23,14 @@ export const SKILL_GROUPS: SkillGroup[] = [
         items: ['PostgreSQL', 'SQLite', 'Drizzle ORM', 'Elasticsearch', 'Zod'],
     },
     {
-        id: 'gamedev',
-        name: { ru: 'Геймдев', en: 'Game dev' },
-        items: ['Unity', 'C#', 'GameMaker', 'PyGame'],
-    },
-    {
         id: 'tools',
         name: { ru: 'Инструменты', en: 'Tools' },
         items: ['Docker', 'Git', 'Linux', 'Figma', 'CI/CD'],
+    },
+    {
+        id: 'gamedev',
+        name: { ru: 'Геймдев', en: 'Game dev' },
+        items: ['Unity', 'C#', 'GameMaker', 'PyGame'],
     },
 ]
 

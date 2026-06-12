@@ -16,10 +16,10 @@ const ru = {
         localeSwitch: 'Switch to English',
     },
     hero: {
-        kicker: 'fullstack · тимлид · game dev',
+        kicker: 'front-end · тимлид · fullstack',
         firstName: 'Артемий',
         lastName: 'Аверьянов',
-        lede: 'Пишу быстрые и аккуратные веб-приложения, веду команду разработки корпоративного мессенджера и не представляю день без строчки кода.',
+        lede: 'Делаю быстрые и аккуратные интерфейсы, веду фронтенд-команду в продуктовой разработке и не представляю день без строчки кода.',
         ctaProjects: 'Смотреть проекты',
         ctaContact: 'Написать мне',
         status: 'открыт к интересным задачам',
@@ -27,9 +27,9 @@ const ru = {
     },
     about: {
         title: 'Обо мне',
-        statementA: 'Код — это ремесло.',
-        statementB: 'Собираю продукты от интерфейса до базы данных и довожу детали до состояния, когда ими приятно пользоваться.',
-        body: 'Сейчас руковожу командой разработки «Отамесседж» — корпоративного мессенджера в РТА Технологии. До этого четыре года преподавал программирование: Python, JavaScript, Unity. Преподавание научило меня главному — объяснять сложное просто. Тем же принципом я руководствуюсь и в коде.',
+        statementA: 'Интерфейс — это ремесло.',
+        statementB: 'Собираю продукты от макета до продакшена и довожу детали до состояния, когда ими приятно пользоваться.',
+        body: 'Сейчас веду фронтенд-разработку в РТА Технологии: строю Synapse Hub — локальное рабочее пространство для LLM — и OtaScribe, сервис транскрибации. До этого руководил командой корпоративного мессенджера «Отамесседж», а ещё раньше четыре года преподавал программирование: Python, JavaScript, Unity. Преподавание научило меня главному — объяснять сложное просто. Тем же принципом я руководствуюсь и в интерфейсах.',
         facts: [
             { value: '7+', label: 'лет пишу код' },
             { value: '55+', label: 'публичных репозиториев' },
@@ -98,10 +98,10 @@ const en: typeof ru = {
         localeSwitch: 'Переключить на русский',
     },
     hero: {
-        kicker: 'fullstack · team lead · game dev',
+        kicker: 'front-end · team lead · fullstack',
         firstName: 'Artemiy',
         lastName: 'Averyanov',
-        lede: 'I build fast, carefully crafted web apps, lead the development team of a corporate messenger, and can’t imagine a day without writing code.',
+        lede: 'I craft fast, precise interfaces, lead a front-end team in product development, and can’t imagine a day without writing code.',
         ctaProjects: 'View projects',
         ctaContact: 'Get in touch',
         status: 'open to interesting work',
@@ -109,9 +109,9 @@ const en: typeof ru = {
     },
     about: {
         title: 'About',
-        statementA: 'Code is a craft.',
-        statementB: 'I build products from the interface down to the database and polish details until they feel right.',
-        body: 'These days I lead the development team of OtaMessage — a corporate messenger at RTA Technologies. Before that I spent four years teaching programming: Python, JavaScript, Unity. Teaching taught me the most useful skill of all — explaining complex things simply. I apply the same principle to code.',
+        statementA: 'Interfaces are a craft.',
+        statementB: 'I build products from mockup to production and polish details until they feel right.',
+        body: 'These days I lead front-end development at RTA Technologies, building Synapse Hub — a local LLM workspace — and OtaScribe, a transcription service. Before that I led the team behind the OtaMessage corporate messenger, and earlier spent four years teaching programming: Python, JavaScript, Unity. Teaching taught me the most useful skill of all — explaining complex things simply. I apply the same principle to interfaces.',
         facts: [
             { value: '7+', label: 'years writing code' },
             { value: '55+', label: 'public repositories' },

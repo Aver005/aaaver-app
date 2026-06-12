@@ -18,10 +18,10 @@ export const JOBS: Job[] = [
         to: null,
         company: { ru: 'РТА Технологии', en: 'RTA Technologies' },
         companyUrl: 'https://rtatex.ru',
-        role: { ru: 'Ведущий разработчик, тимлид', en: 'Lead developer, team lead' },
+        role: { ru: 'Ведущий фронтенд-разработчик, тимлид', en: 'Lead front-end developer, team lead' },
         description: {
-            ru: 'Руковожу командой корпоративного мессенджера «Отамесседж»: архитектура, видеоконференции и голосовые сообщения, система шаблонов, интеграции с внешними системами.',
-            en: 'Leading the OtaMessage corporate messenger team: architecture, video conferencing and voice messages, a template system, integrations with external systems.',
+            ru: 'Веду фронтенд-направление: Synapse Hub — рабочее пространство для локальных LLM, сервис транскрибации OtaScribe, корпоративный мессенджер «Отамесседж». Архитектура, команда, код-ревью.',
+            en: 'Leading the front-end: Synapse Hub — a local LLM workspace, the OtaScribe transcription service and the OtaMessage corporate messenger. Architecture, team, code review.',
         },
     },
     {
