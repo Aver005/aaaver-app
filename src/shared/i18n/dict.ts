@@ -1,0 +1,171 @@
+export type Locale = 'ru' | 'en'
+
+/** Строка в двух языках — для контента в entities */
+export type L10n = Record<Locale, string>
+
+const ru = {
+    nav: {
+        about: 'Обо мне',
+        experience: 'Опыт',
+        projects: 'Проекты',
+        opensource: 'Open Source',
+        stack: 'Стек',
+        contact: 'Связаться',
+        menuOpen: 'Открыть меню',
+        menuClose: 'Закрыть меню',
+        localeSwitch: 'Switch to English',
+    },
+    hero: {
+        kicker: 'fullstack · тимлид · game dev',
+        firstName: 'Артемий',
+        lastName: 'Аверьянов',
+        lede: 'Пишу быстрые и аккуратные веб-приложения, веду команду разработки корпоративного мессенджера и не представляю день без строчки кода.',
+        ctaProjects: 'Смотреть проекты',
+        ctaContact: 'Написать мне',
+        status: 'открыт к интересным задачам',
+        scroll: 'листайте',
+    },
+    about: {
+        title: 'Обо мне',
+        statementA: 'Код — это ремесло.',
+        statementB: 'Собираю продукты от интерфейса до базы данных и довожу детали до состояния, когда ими приятно пользоваться.',
+        body: 'Сейчас руковожу командой разработки «Отамесседж» — корпоративного мессенджера в РТА Технологии. До этого четыре года преподавал программирование: Python, JavaScript, Unity. Преподавание научило меня главному — объяснять сложное просто. Тем же принципом я руководствуюсь и в коде.',
+        facts: [
+            { value: '7+', label: 'лет пишу код' },
+            { value: '55+', label: 'публичных репозиториев' },
+            { value: '4', label: 'года преподавал разработку' },
+            { value: '10+', label: 'проектов в продакшене' },
+        ],
+    },
+    experience: {
+        title: 'Опыт',
+        present: 'наст. время',
+    },
+    projects: {
+        title: 'Проекты',
+        subtitle: 'Избранное из продакшена — то, что можно потрогать руками.',
+        visit: 'Открыть сайт',
+    },
+    openSource: {
+        title: 'Open Source',
+        subtitle: 'Подтягивается из GitHub автоматически — без устаревших списков.',
+        viewAll: 'Все репозитории',
+        error: 'GitHub сейчас не отвечает — загляните в профиль напрямую.',
+    },
+    stack: {
+        title: 'Стек',
+        subtitle: 'Инструменты, которыми пользуюсь каждый день.',
+    },
+    contact: {
+        title: 'Контакт',
+        subtitle: 'Расскажите о задаче — отвечу в течение дня.',
+        channelsLabel: 'Напрямую',
+        nameLabel: 'Имя',
+        namePh: 'Как к вам обращаться',
+        contactLabel: 'Как связаться',
+        contactPh: 'Telegram, почта или телефон',
+        messageLabel: 'Сообщение',
+        messagePh: 'Пара слов о задаче — или просто привет',
+        slideIdle: 'Проведите, чтобы отправить',
+        slideArming: 'Готовлю защиту от ботов…',
+        slideSending: 'Отправляю…',
+        slideDone: 'Доставлено',
+        success: 'Сообщение уже у меня в Telegram. Отвечу скоро.',
+        errValidation: 'Проверьте поля — что-то не заполнено или слишком коротко.',
+        errRateLimit: 'Слишком много сообщений с вашего адреса. Попробуйте через час.',
+        errCaptcha: 'Проверка не пройдена. Обновите страницу и попробуйте ещё раз.',
+        errServer: 'Не получилось отправить. Напишите мне напрямую в Telegram.',
+        hint: 'Без капчи с светофорами: пока вы печатаете, браузер незаметно решает криптографическую задачу, а ползунок подтверждает, что вы человек.',
+    },
+    footer: {
+        builtWith: 'Собрано руками на React, Bun и SQLite',
+        source: 'Исходники',
+        rights: '© 2026 Артемий Аверьянов',
+        top: 'Наверх',
+    },
+}
+
+const en: typeof ru = {
+    nav: {
+        about: 'About',
+        experience: 'Experience',
+        projects: 'Projects',
+        opensource: 'Open Source',
+        stack: 'Stack',
+        contact: 'Contact',
+        menuOpen: 'Open menu',
+        menuClose: 'Close menu',
+        localeSwitch: 'Переключить на русский',
+    },
+    hero: {
+        kicker: 'fullstack · team lead · game dev',
+        firstName: 'Artemiy',
+        lastName: 'Averyanov',
+        lede: 'I build fast, carefully crafted web apps, lead the development team of a corporate messenger, and can’t imagine a day without writing code.',
+        ctaProjects: 'View projects',
+        ctaContact: 'Get in touch',
+        status: 'open to interesting work',
+        scroll: 'scroll',
+    },
+    about: {
+        title: 'About',
+        statementA: 'Code is a craft.',
+        statementB: 'I build products from the interface down to the database and polish details until they feel right.',
+        body: 'These days I lead the development team of OtaMessage — a corporate messenger at RTA Technologies. Before that I spent four years teaching programming: Python, JavaScript, Unity. Teaching taught me the most useful skill of all — explaining complex things simply. I apply the same principle to code.',
+        facts: [
+            { value: '7+', label: 'years writing code' },
+            { value: '55+', label: 'public repositories' },
+            { value: '4', label: 'years teaching development' },
+            { value: '10+', label: 'projects in production' },
+        ],
+    },
+    experience: {
+        title: 'Experience',
+        present: 'present',
+    },
+    projects: {
+        title: 'Projects',
+        subtitle: 'Selected production work — things you can actually try.',
+        visit: 'Visit site',
+    },
+    openSource: {
+        title: 'Open Source',
+        subtitle: 'Pulled straight from GitHub — no stale lists.',
+        viewAll: 'All repositories',
+        error: 'GitHub is not responding right now — check the profile directly.',
+    },
+    stack: {
+        title: 'Stack',
+        subtitle: 'Tools I reach for every day.',
+    },
+    contact: {
+        title: 'Contact',
+        subtitle: 'Tell me about your project — I reply within a day.',
+        channelsLabel: 'Direct',
+        nameLabel: 'Name',
+        namePh: 'What should I call you',
+        contactLabel: 'How to reach you',
+        contactPh: 'Telegram, email or phone',
+        messageLabel: 'Message',
+        messagePh: 'A few words about the task — or just say hi',
+        slideIdle: 'Slide to send',
+        slideArming: 'Arming anti-bot shield…',
+        slideSending: 'Sending…',
+        slideDone: 'Delivered',
+        success: 'Your message is already in my Telegram. I’ll reply soon.',
+        errValidation: 'Check the fields — something is missing or too short.',
+        errRateLimit: 'Too many messages from your address. Try again in an hour.',
+        errCaptcha: 'Verification failed. Refresh the page and try again.',
+        errServer: 'Sending failed. Message me directly on Telegram.',
+        hint: 'No traffic-light captchas: while you type, the browser quietly solves a cryptographic puzzle, and the slider confirms you’re human.',
+    },
+    footer: {
+        builtWith: 'Hand-built with React, Bun and SQLite',
+        source: 'Source code',
+        rights: '© 2026 Artemiy Averyanov',
+        top: 'Back to top',
+    },
+}
+
+export const dictionaries: Record<Locale, typeof ru> = { ru, en }
+export type Dict = typeof ru

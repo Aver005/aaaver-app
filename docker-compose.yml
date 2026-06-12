@@ -1,12 +1,26 @@
-version: '3.8'
-
 services:
-  aaaver-app:
-    build:
-      context: .
-      args:
-        DATABASE_URL: ${DATABASE_URL}
+  app:
+    build: .
+    container_name: aaaver-app
+    restart: unless-stopped
     ports:
       - '6110:3000'
+    env_file: .env
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      # внутри контейнера всегда так, что бы ни лежало в .env
+      PORT: 3000
+      DATABASE_PATH: /data/aaaver.db
+    volumes:
+      # БД живёт на хосте: ./data/aaaver.db можно копировать, бэкапить
+      # и подменять без пересборки контейнера
+      - ./data:/data
+    healthcheck:
+      test:
+        - CMD
+        - bun
+        - -e
+        - "const r = await fetch('http://localhost:3000/api/health'); process.exit(r.ok ? 0 : 1)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

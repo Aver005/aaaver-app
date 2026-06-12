@@ -1,28 +1,22 @@
-# Use the official Bun image
-FROM oven/bun:1 AS base
+# --- зависимости ---
+FROM oven/bun:1.3-alpine AS deps
 WORKDIR /app
-
-# Install dependencies
-FROM base AS deps
-COPY package.json bun.lock .env ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-# Build the app
-FROM base AS builder
-ARG DATABASE_URL
-ENV DATABASE_URL=$DATABASE_URL
-COPY --from=deps /app/node_modules ./node_modules
+# --- сборка фронтенда ---
+FROM deps AS build
 COPY . .
 RUN bun run build
 
-# Run the app
-FROM base AS runner
+# --- рантайм: у сервера ноль npm-зависимостей, node_modules не нужен ---
+FROM oven/bun:1.3-alpine AS runtime
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/.output ./.output
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
+ENV NODE_ENV=production
+ENV DATABASE_PATH=/data/aaaver.db
+
+COPY server ./server
+COPY --from=build /app/dist ./dist
 
 EXPOSE 3000
-
-CMD ["bun", ".output/server/index.mjs"]
+CMD ["bun", "server/index.ts"]

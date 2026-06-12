@@ -1,0 +1,159 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/unbounded';
+@import '@fontsource-variable/golos-text';
+@import '@fontsource-variable/jetbrains-mono';
+
+@theme {
+    --font-display: 'Unbounded Variable', 'Arial Black', sans-serif;
+    --font-sans: 'Golos Text Variable', 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono Variable', 'Consolas', monospace;
+
+    /* чернила и бумага — тёплая тёмная гамма */
+    --color-ink: #0c0a09;
+    --color-ink-raise: #131009;
+    --color-ink-soft: #1a1610;
+    --color-paper: #ece7df;
+    --color-paper-dim: #a89f92;
+    --color-paper-faint: #635c50;
+    --color-line: rgba(236, 231, 223, 0.09);
+    --color-line-strong: rgba(236, 231, 223, 0.18);
+
+    /* единственный акцент */
+    --color-ember: #ff5d1f;
+    --color-ember-bright: #ff8a50;
+    --color-ember-deep: #c23c0a;
+
+    --animate-marquee: marquee 36s linear infinite;
+    --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @keyframes pulse-dot {
+        0%,
+        100% {
+            opacity: 1;
+            box-shadow: 0 0 0 0 rgba(255, 93, 31, 0.5);
+        }
+        50% {
+            opacity: 0.6;
+            box-shadow: 0 0 0 6px rgba(255, 93, 31, 0);
+        }
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+::selection {
+    background-color: var(--color-ember);
+    color: var(--color-ink);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-soft) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-ink-soft);
+    border-radius: 8px;
+    border: 2px solid var(--color-ink);
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* контурный текст для display-заголовков */
+@utility text-outline {
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-paper) 45%, transparent);
+    color: transparent;
+}
+
+@utility text-outline-ember {
+    -webkit-text-stroke: 1.5px var(--color-ember);
+    color: transparent;
+}
+
+/* тонкая линейка-разделитель */
+@utility hairline {
+    border-color: var(--color-line);
+}
+
+/* зерно поверх всего сайта */
+.grain::after {
+    content: '';
+    position: fixed;
+    inset: -100%;
+    z-index: 90;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    animation: grain-shift 0.9s steps(4) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .grain::after {
+        animation: none;
+    }
+}
+
+@keyframes grain-shift {
+    0% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(-2%, 1%);
+    }
+    50% {
+        transform: translate(1%, -2%);
+    }
+    75% {
+        transform: translate(-1%, 2%);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* фоновая сетка из крестиков для hero */
+.cross-grid {
+    background-image: radial-gradient(circle, var(--color-line-strong) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 75%);
+}

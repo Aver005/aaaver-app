@@ -1,14 +1,13 @@
 @echo off
 setlocal
 
-:: Default values
+:: Defaults — перекрываются значениями из .env / .env.local
 set "DEPLOY_HOST=127.0.0.1"
 set "DEPLOY_USER=root"
 set "DEPLOY_KEY=C:\ssh\key"
-set "DEPLOY_PATH=maushi-crm"
+set "DEPLOY_PATH=aaaver-app"
 set "DEPLOY_COMMAND=docker compose up --build -d"
 
-:: Read from .env and .env.local
 for %%F in (.env .env.local) do (
     if exist "%%F" (
         for /f "usebackq tokens=1,* delims==" %%A in ("%%F") do (
