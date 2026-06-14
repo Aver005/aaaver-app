@@ -2,16 +2,6 @@ import type { Project } from './types'
 
 export const PROJECTS: Project[] = [
     {
-        id: 'synapse-hub',
-        title: 'Synapse Hub',
-        image: '/projects/synapsehub.png',
-        description: {
-            ru: 'Локальное рабочее пространство для LLM: чаты с моделями на собственном железе — без внешних API, подписок и утечек данных. Приватность по умолчанию.',
-            en: 'A local LLM workspace: chat with models on your own hardware — no external APIs, subscriptions or data leaks. Private by default.',
-        },
-        tags: ['AI', 'LLM', 'React'],
-    },
-    {
         id: 'otascribe',
         title: 'OtaScribe',
         url: 'http://app.otascribe.ru',
@@ -21,6 +11,28 @@ export const PROJECTS: Project[] = [
             en: 'An audio & video transcription service: upload a recording, get text with timecodes.',
         },
         tags: ['AI', 'Transcription', 'Audio'],
+    },
+    {
+        id: 'poopseek',
+        title: 'PoopSeek',
+        url: 'https://github.com/Aver005/poopseek',
+        image: '/projects/poopseek.png',
+        description: {
+            ru: 'Терминальный ИИ-агент на TypeScript и Bun: автономный agent-loop, 31+ инструмент, восемь LLM-провайдеров, протоколы MCP и ACP, семантический поиск по кодовой базе.',
+            en: 'A terminal AI agent in TypeScript and Bun: an autonomous agent loop, 31+ tools, eight LLM providers, MCP and ACP protocols, and semantic codebase search.',
+        },
+        tags: ['AI', 'CLI', 'Bun'],
+    },
+    {
+        id: 'warcube',
+        title: 'WarCube',
+        url: 'https://github.com/Aver005/warcube-web',
+        image: '/projects/warcube.png',
+        description: {
+            ru: '2D тактический шутер на выживание: кубический боец против волн врагов в разрушаемом окружении. Phaser 3, React и процедурная генерация уровней.',
+            en: 'A 2D tactical survival shooter: a cube warrior against waves of enemies in destructible arenas. Phaser 3, React and procedural level generation.',
+        },
+        tags: ['Game', 'Phaser', 'React'],
     },
     {
         id: 'pocacall',
@@ -43,16 +55,5 @@ export const PROJECTS: Project[] = [
             en: 'A minimalist animated booking site for automated recording studios — from picking a slot to payment.',
         },
         tags: ['Booking', 'Animation', 'Minimalism'],
-    },
-    {
-        id: 'rtatex',
-        title: 'RtaTex',
-        url: 'https://rtatex.ru',
-        image: '/projects/rtatex.png',
-        description: {
-            ru: 'Главный сайт компании «РТА Технологии»: презентация продуктов, услуг и команды.',
-            en: 'The main website of RTA Technologies: products, services and the team.',
-        },
-        tags: ['Corporate', 'Presentation'],
     },
 ]

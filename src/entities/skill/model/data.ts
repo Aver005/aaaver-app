@@ -30,7 +30,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
     {
         id: 'gamedev',
         name: { ru: 'Геймдев', en: 'Game dev' },
-        items: ['Unity', 'C#', 'GameMaker', 'PyGame'],
+        items: ['Phaser', 'Unity', 'C#', 'GameMaker', 'PyGame'],
     },
 ]
 

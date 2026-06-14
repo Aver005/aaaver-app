@@ -29,7 +29,7 @@ const ru = {
         title: 'Обо мне',
         statementA: 'Интерфейс — это ремесло.',
         statementB: 'Собираю продукты от макета до продакшена и довожу детали до состояния, когда ими приятно пользоваться.',
-        body: 'Сейчас веду фронтенд-разработку в РТА Технологии: строю Synapse Hub — локальное рабочее пространство для LLM — и OtaScribe, сервис транскрибации. До этого руководил командой корпоративного мессенджера «Отамесседж», а ещё раньше четыре года преподавал программирование: Python, JavaScript, Unity. Преподавание научило меня главному — объяснять сложное просто. Тем же принципом я руководствуюсь и в интерфейсах.',
+        body: 'Сейчас веду фронтенд-разработку в РТА Технологии: интерфейсы продуктов, архитектура клиентской части, команда и код-ревью. Один из проектов — OtaScribe, сервис транскрибации. Четыре года до этого преподавал программирование: Python, JavaScript, Unity. Преподавание научило меня главному — объяснять сложное просто. Тем же принципом я руководствуюсь и в интерфейсах.',
         facts: [
             { value: '7+', label: 'лет пишу код' },
             { value: '55+', label: 'публичных репозиториев' },
@@ -111,7 +111,7 @@ const en: typeof ru = {
         title: 'About',
         statementA: 'Interfaces are a craft.',
         statementB: 'I build products from mockup to production and polish details until they feel right.',
-        body: 'These days I lead front-end development at RTA Technologies, building Synapse Hub — a local LLM workspace — and OtaScribe, a transcription service. Before that I led the team behind the OtaMessage corporate messenger, and earlier spent four years teaching programming: Python, JavaScript, Unity. Teaching taught me the most useful skill of all — explaining complex things simply. I apply the same principle to interfaces.',
+        body: 'These days I lead front-end development at RTA Technologies: product interfaces, client-side architecture, team and code review. One of those products is OtaScribe, a transcription service. Before that I spent four years teaching programming: Python, JavaScript, Unity. Teaching taught me the most useful skill of all — explaining complex things simply. I apply the same principle to interfaces.',
         facts: [
             { value: '7+', label: 'years writing code' },
             { value: '55+', label: 'public repositories' },

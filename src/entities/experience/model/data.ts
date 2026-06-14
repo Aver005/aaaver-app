@@ -20,8 +20,8 @@ export const JOBS: Job[] = [
         companyUrl: 'https://rtatex.ru',
         role: { ru: 'Ведущий фронтенд-разработчик, тимлид', en: 'Lead front-end developer, team lead' },
         description: {
-            ru: 'Веду фронтенд-направление: Synapse Hub — рабочее пространство для локальных LLM, сервис транскрибации OtaScribe, корпоративный мессенджер «Отамесседж». Архитектура, команда, код-ревью.',
-            en: 'Leading the front-end: Synapse Hub — a local LLM workspace, the OtaScribe transcription service and the OtaMessage corporate messenger. Architecture, team, code review.',
+            ru: 'Веду фронтенд-направление в продуктовой команде: интерфейсы продуктов, в том числе сервиса транскрибации OtaScribe. Архитектура клиентской части, команда, код-ревью.',
+            en: 'Leading front-end work in the product team: product interfaces, including the OtaScribe transcription service. Client-side architecture, team, code review.',
         },
     },
     {
