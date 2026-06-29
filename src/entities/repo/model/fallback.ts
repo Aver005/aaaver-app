@@ -16,6 +16,16 @@ export const REPOS_FALLBACK: RepoInfo[] = [
         pushedAt: '2026-06-03T10:55:25Z',
     },
     {
+        name: 'pooprusteek',
+        url: 'https://github.com/Aver005/pooprusteek',
+        description:
+            'Быстрый TUI-кодинг-агент на Rust: Ratatui, Catppuccin, потоковый вывод, MCP и ACP.',
+        language: 'Rust',
+        stars: 0,
+        topics: ['agent', 'ai', 'rust', 'cli', 'tui'],
+        pushedAt: '2026-06-28T00:00:00Z',
+    },
+    {
         name: 'poopseek',
         url: 'https://github.com/Aver005/poopseek',
         description:

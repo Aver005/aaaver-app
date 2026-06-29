@@ -76,6 +76,35 @@ const ru = {
         errCaptcha: 'Проверка не пройдена. Обновите страницу и попробуйте ещё раз.',
         errServer: 'Не получилось отправить. Напишите мне напрямую в Telegram.',
         hint: 'Без капчи с светофорами: пока вы печатаете, браузер незаметно решает криптографическую задачу, а ползунок подтверждает, что вы человек.',
+        consentLabel: 'Я даю согласие на обработку персональных данных',
+        consentOpen: 'читать соглашение',
+        consentRequired: 'Чтобы отправить сообщение, подтвердите согласие на обработку данных.',
+        consentModalTitle: 'Согласие на обработку персональных данных',
+        consentModalLead:
+            'Отправляя форму, вы свободно, своей волей и в своём интересе даёте согласие на обработку персональных данных в соответствии с Федеральным законом РФ № 152-ФЗ "О персональных данных".',
+        consentSections: [
+            {
+                title: 'Оператор',
+                body: 'Оператором персональных данных является владелец сайта aaaver.ru Артемий Аверьянов, ИНН 771392766430. Для связи по вопросам обработки персональных данных: aver.tema.005@ya.ru.',
+            },
+            {
+                title: 'Какие данные обрабатываются',
+                body: 'Имя, контакт для обратной связи, текст сообщения, технические данные запроса и антиспам-метрики, необходимые для защиты формы от автоматических отправок.',
+            },
+            {
+                title: 'Цель обработки',
+                body: 'Обработка данных нужна только для обратной связи по вашему обращению, защиты формы от спама и хранения истории сообщений, чтобы ни одно обращение не потерялось.',
+            },
+            {
+                title: 'Что происходит с данными',
+                body: 'Данные передаются через форму сайта, сохраняются на сервере и пересылаются владельцу сайта в Telegram для ответа на обращение. Данные не публикуются и не передаются третьим лицам без законных оснований.',
+            },
+            {
+                title: 'Срок и отзыв согласия',
+                body: 'Согласие действует до достижения цели обработки или до его отзыва. Вы можете отозвать согласие, написав на aver.tema.005@ya.ru с теми же контактными данными, которые указали в форме.',
+            },
+        ],
+        consentClose: 'Понятно',
     },
     footer: {
         builtWith: 'Собрано руками на React, Bun и SQLite',
@@ -158,6 +187,35 @@ const en: typeof ru = {
         errCaptcha: 'Verification failed. Refresh the page and try again.',
         errServer: 'Sending failed. Message me directly on Telegram.',
         hint: 'No traffic-light captchas: while you type, the browser quietly solves a cryptographic puzzle, and the slider confirms you’re human.',
+        consentLabel: 'I consent to the processing of my personal data',
+        consentOpen: 'read the agreement',
+        consentRequired: 'To send the message, confirm your consent to personal data processing.',
+        consentModalTitle: 'Consent to Personal Data Processing',
+        consentModalLead:
+            'By sending the form, you freely, knowingly, and in your own interest consent to the processing of your personal data in line with Russian Federal Law No. 152-FZ "On Personal Data".',
+        consentSections: [
+            {
+                title: 'Operator',
+                body: 'The personal data operator is Artemiy Averyanov, the owner of aaaver.ru, TIN 771392766430. Contact for any questions about personal data processing: aver.tema.005@ya.ru.',
+            },
+            {
+                title: 'What data is processed',
+                body: 'Your name, contact details for follow-up, message text, and technical request / anti-spam metrics needed to protect the form from automated submissions.',
+            },
+            {
+                title: 'Purpose of processing',
+                body: 'The data is processed solely to reply to your request, protect the form from spam, and retain message history so no inquiry gets lost.',
+            },
+            {
+                title: 'What happens to the data',
+                body: 'Data is sent through the website form, stored on the server, and forwarded to the site owner via Telegram to answer your request. It is not published or shared with third parties without legal grounds.',
+            },
+            {
+                title: 'Retention and withdrawal',
+                body: 'Your consent remains valid until the processing purpose is achieved or until you withdraw it. You can withdraw consent by emailing aver.tema.005@ya.ru from the same contact details you used in the form.',
+            },
+        ],
+        consentClose: 'Understood',
     },
     footer: {
         builtWith: 'Hand-built with React, Bun and SQLite',

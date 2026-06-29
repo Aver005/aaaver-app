@@ -1,3 +1,4 @@
-export type { Project } from './model/types'
-export { PROJECTS } from './model/data'
+export type { Project, SiblingPair } from './model/types'
+export { PROJECTS, SIBLINGS } from './model/data'
 export { ProjectCard } from './ui/ProjectCard'
+export { SiblingCard } from './ui/SiblingCard'

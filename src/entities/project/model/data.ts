@@ -1,4 +1,4 @@
-import type { Project } from './types'
+import type { Project, SiblingPair } from './types'
 
 export const PROJECTS: Project[] = [
     {
@@ -11,17 +11,6 @@ export const PROJECTS: Project[] = [
             en: 'An audio & video transcription service: upload a recording, get text with timecodes.',
         },
         tags: ['AI', 'Transcription', 'Audio'],
-    },
-    {
-        id: 'poopseek',
-        title: 'PoopSeek',
-        url: 'https://github.com/Aver005/poopseek',
-        image: '/projects/poopseek.webp',
-        description: {
-            ru: 'Терминальный ИИ-агент на TypeScript и Bun: автономный agent-loop, 31+ инструмент, восемь LLM-провайдеров, протоколы MCP и ACP, семантический поиск по кодовой базе.',
-            en: 'A terminal AI agent in TypeScript and Bun: an autonomous agent loop, 31+ tools, eight LLM providers, MCP and ACP protocols, and semantic codebase search.',
-        },
-        tags: ['AI', 'CLI', 'Bun'],
     },
     {
         id: 'warcube',
@@ -57,3 +46,30 @@ export const PROJECTS: Project[] = [
         tags: ['Booking', 'Animation', 'Minimalism'],
     },
 ]
+
+export const SIBLINGS: SiblingPair = {
+    brothers: [
+        {
+            id: 'poopseek',
+            title: 'PoopSeek',
+            url: 'https://github.com/Aver005/poopseek',
+            image: '/projects/poopseek.webp',
+            description: {
+                ru: 'Терминальный ИИ-агент на TypeScript и Bun: автономный agent-loop, 31+ инструмент, восемь LLM-провайдеров, протоколы MCP и ACP, семантический поиск по кодовой базе.',
+                en: 'A terminal AI agent in TypeScript and Bun: an autonomous agent loop, 31+ tools, eight LLM providers, MCP and ACP protocols, and semantic codebase search.',
+            },
+            tags: ['AI', 'CLI', 'Bun'],
+        },
+        {
+            id: 'pooprusteek',
+            title: 'PoopRusteek',
+            url: 'https://github.com/Aver005/pooprusteek',
+            image: '/projects/pooprusteek.webp',
+            description: {
+                ru: 'Перезапись PoopSeek на Rust с богатым TUI: Ratatui, Catppuccin-тема, потоковый вывод, PoW через WASM, MCP и ACP-сервер, PTY для интерактивных процессов.',
+                en: 'A Rust rewrite of PoopSeek with a rich TUI: Ratatui, Catppuccin theme, streaming output, PoW via WASM, MCP and ACP server, PTY for interactive processes.',
+            },
+            tags: ['AI', 'CLI', 'Rust'],
+        },
+    ],
+}

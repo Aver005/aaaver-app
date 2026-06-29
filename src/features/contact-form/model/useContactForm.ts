@@ -17,9 +17,10 @@ interface Fields {
     contact: string
     message: string
     website: string // honeypot
+    consent: boolean
 }
 
-const EMPTY: Fields = { name: '', contact: '', message: '', website: '' }
+const EMPTY: Fields = { name: '', contact: '', message: '', website: '', consent: false }
 
 /**
  * Машина состояний формы. Proof-of-work начинает решаться в фоне
@@ -40,10 +41,11 @@ export function useContactForm() {
     const isValid =
         fields.name.trim().length >= 2 &&
         fields.contact.trim().length >= 3 &&
-        fields.message.trim().length >= 10
+        fields.message.trim().length >= 10 &&
+        fields.consent
 
-    const setField = useCallback((key: keyof Fields, value: string) => {
-        setFields((prev) => ({ ...prev, [key]: value }))
+    const setField = useCallback(<K extends keyof Fields>(key: K, value: Fields[K]) => {
+        setFields((prev) => ({ ...prev, [key]: value }) as Fields)
     }, [])
 
     const arm = useCallback(() => {
