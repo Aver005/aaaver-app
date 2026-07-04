@@ -35,15 +35,21 @@ export const PROJECTS: Project[] = [
         tags: ['WebRTC', 'React', 'UI/UX'],
     },
     {
-        id: 'order-maushi',
-        title: 'Order Maushi',
-        url: 'https://order.maushi.ru',
-        image: '/projects/order-maushi.webp',
+        id: 'maushi',
+        title: 'Maushi',
+        url: 'https://maushi.ru',
+        image: '/projects/maushi/hero.webp',
+        gallery: [
+            '/projects/maushi/hero.webp',
+            '/projects/maushi/studio.webp',
+            '/projects/maushi/order.webp',
+            '/projects/maushi/lk.webp',
+        ],
         description: {
-            ru: 'Минималистичный анимированный сайт бронирования автоматизированных звукозаписывающих студий — от выбора слота до оплаты.',
-            en: 'A minimalist animated booking site for automated recording studios — from picking a slot to payment.',
+            ru: 'Экосистема автоматизированных звукозаписывающих студий: промо-сайт, онлайн-бронирование слотов и личный кабинет клиента.',
+            en: 'An ecosystem of automated recording studios: promo site, online slot booking and a client dashboard.',
         },
-        tags: ['Booking', 'Animation', 'Minimalism'],
+        tags: ['Platform', 'Booking', 'UI/UX'],
     },
 ]
 

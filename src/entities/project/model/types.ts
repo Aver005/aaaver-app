@@ -5,6 +5,8 @@ export interface Project {
     title: string
     url?: string
     image: string
+    /** Все изображения галереи; первый элемент — акцентное изображение по умолчанию */
+    gallery?: string[]
     description: L10n
     tags: string[]
 }
