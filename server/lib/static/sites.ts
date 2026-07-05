@@ -11,9 +11,9 @@ import type { StaticHandler } from './types'
  */
 
 /** Имена, занятые самим портфолио, — такой слаг демке не достанется */
-const RESERVED = new Set(['api', 'assets', 'projects'])
+export const RESERVED = new Set(['api', 'assets', 'projects'])
 
-const SLUG_RE = /^[a-z0-9-]+$/
+export const SLUG_RE = /^[a-z0-9-]+$/
 
 /** Корень демки, если слаг валиден и в ней есть index.html */
 async function siteRoot(slug: string): Promise<string | null> {
@@ -37,6 +37,10 @@ export const serveSite: StaticHandler = async ({ pathname, search }) => {
     }
 
     const path = rest.endsWith('/') ? `${rest}index.html` : rest
+
+    // дотфайлы не отдаём: там служебное (.release.json от апдейтера и т.п.)
+    if (path.includes('/.')) return null
+
     const file = await tryFile(safeJoin(root, path), cacheControl(path))
     if (file) return file
 

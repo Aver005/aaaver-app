@@ -16,6 +16,9 @@ ENV NODE_ENV=production
 ENV DATABASE_PATH=/data/aaaver.db
 
 COPY server ./server
+# апдейтер демок живёт в этом же образе, вторым сервисом compose
+COPY scripts ./scripts
+COPY sites.config.json ./
 COPY --from=build /app/dist ./dist
 
 EXPOSE 3000

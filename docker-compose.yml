@@ -27,3 +27,18 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+
+  # Автодеплой демок: опрашивает релизы по sites.config.json и обновляет
+  # sites/. Единственный, у кого этот каталог смонтирован на запись, —
+  # основной сервер видит его read-only.
+  sites-updater:
+    build: .
+    container_name: aaaver-sites-updater
+    restart: unless-stopped
+    command: ['bun', 'scripts/sites-updater.ts']
+    env_file: .env
+    environment:
+      SITES_DIR: /sites
+    volumes:
+      - ./sites:/sites
+      - ./sites.config.json:/app/sites.config.json:ro

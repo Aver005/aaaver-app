@@ -1,0 +1,51 @@
+# Переиспользуемый workflow для демок: собирает проект и кладёт dist.tar.gz
+# в скользящий релиз `latest`, откуда его забирает sites-updater на сервере
+# (см. docs/deploy.md). В репе демки достаточно файла:
+#
+#   .github/workflows/demo.yml
+#   ---
+#   on: { push: { branches: [master] } }
+#   jobs:
+#     demo:
+#       uses: Aver005/aaaver-app/.github/workflows/site-release.yml@master
+#       permissions: { contents: write }
+#       # with: { build-command: 'npm ci && npm run build', dist-dir: 'build' }
+
+name: site-release
+
+on:
+  workflow_call:
+    inputs:
+      build-command:
+        description: Команда сборки
+        type: string
+        default: bun install --frozen-lockfile && bun run build
+      dist-dir:
+        description: Папка с собранным сайтом
+        type: string
+        default: dist
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Сборка
+        run: ${{ inputs.build-command }}
+
+      - name: Упаковка (index.html должен оказаться в корне архива)
+        run: tar -czf dist.tar.gz -C '${{ inputs.dist-dir }}' .
+
+      - name: Публикация в скользящий релиз `latest`
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view latest >/dev/null 2>&1 || \
+            gh release create latest --title 'Live demo build' \
+              --notes 'Автосборка для aaaver.ru — этот релиз обновляется на каждый пуш.'
+          gh release upload latest dist.tar.gz --clobber

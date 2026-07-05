@@ -94,6 +94,71 @@ deploy-site.bat poopseek E:\Projects\poopseek\dist
 
 Список смонтированных демок сервер отдаёт на `GET /api/sites`.
 
+## Автодеплой демок из GitHub/GitLab
+
+Ручной `deploy-site.bat` не обязателен: рядом с сервером крутится
+`sites-updater` (второй сервис в compose, тот же образ), который
+опрашивает релизы реп из `sites.config.json` и сам обновляет `sites/`.
+
+`sites.config.json` в корне репозитория:
+
+```json
+{
+    "poopseek": { "repo": "github:Aver005/poopseek" },
+    "warcube": { "repo": "gitlab:group/warcube", "asset": "dist.tar.gz", "tag": "v2.0" }
+}
+```
+
+Поля: `repo` — обязательное, `github:owner/repo` или `gitlab:group/project`;
+`asset` — имя файла в релизе (по умолчанию `dist.tar.gz`); `tag` — пин на
+конкретный тег (по умолчанию тег `latest`, если его нет — последний релиз).
+Файл монтируется в контейнер, так что правка на сервере подхватывается
+на следующем цикле без пересборки.
+
+Как это работает по шагам:
+
+1. CI демки на каждый пуш собирает сайт и кладёт `dist.tar.gz`
+   в скользящий релиз `latest` своей репы;
+2. апдейтер раз в `SITES_POLL_MINUTES` (по умолчанию 10) сравнивает
+   версию релиза с меткой `.release.json` внутри развёрнутой демки;
+3. если версия новая — скачивает архив, проверяет его (пути не вылезают
+   из папки, в корне есть index.html, размер до 200 МБ), распаковывает
+   во временную папку и атомарно подменяет `sites/<slug>/`.
+
+Каталог `sites` смонтирован на запись только апдейтеру, основной сервер
+видит его read-only.
+
+Для GitHub-демки достаточно одного файла в её репе — весь пайплайн
+переиспользуется из этой репы:
+
+```yaml
+# .github/workflows/demo.yml
+on: { push: { branches: [master] } }
+jobs:
+  demo:
+    uses: Aver005/aaaver-app/.github/workflows/site-release.yml@master
+    permissions: { contents: write }
+    # проект не на bun или dist зовётся иначе:
+    # with: { build-command: 'npm ci && npm run build', dist-dir: 'build' }
+```
+
+Для GitLab — обычный job в `.gitlab-ci.yml`, который собирает сайт,
+пакует `tar -czf dist.tar.gz -C dist .` и создаёт релиз со ссылкой
+на этот файл (release-cli, asset link с именем `dist.tar.gz`).
+
+Мелочи, которые стоит знать:
+
+- токены не нужны: публичные репы читаются анонимно, лимитов API хватает.
+  Для приватных реп впиши `GITHUB_TOKEN` / `GITLAB_TOKEN` в `.env`;
+- self-hosted GitLab поддерживается через `GITLAB_API` в `.env`
+  (по умолчанию `https://gitlab.com/api/v4`);
+- слаг из `sites.config.json` принадлежит апдейтеру: ручную заливку
+  через `deploy-site.bat` он перезапишет на следующем цикле. Ручной
+  способ — для демок, которых в конфиге нет;
+- прогнать цикл руками: `docker compose run --rm sites-updater bun
+  scripts/sites-updater.ts --once` (или просто смотри логи:
+  `docker compose logs -f sites-updater`).
+
 ## Реверс-прокси и HTTPS
 
 Контейнер слушает 6110 без TLS. Снаружи логично поставить caddy или nginx.
