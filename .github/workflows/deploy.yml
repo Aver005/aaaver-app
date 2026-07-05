@@ -44,7 +44,10 @@ jobs:
             bash -s -- "$DEPLOY_PATH" << 'EOF'
           set -euo pipefail
           cd "${1:-aaaver-app}"
-          git pull --ff-only
+          # серверная копия — зеркало origin/master: переживает force-пуши,
+          # untracked (data/, sites/, .env) reset не трогает
+          git fetch origin master
+          git reset --hard origin/master
           docker compose up --build -d
           # мусор от пересборок копится быстро, VDS не резиновый
           docker image prune -f
