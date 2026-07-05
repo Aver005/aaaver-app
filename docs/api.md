@@ -93,3 +93,21 @@
 ```json
 { "sites": ["poopseek", "warcube"] }
 ```
+
+## POST /api/sites-reload
+
+Форс-проверка релизов демок, не дожидаясь цикла опроса (сервер
+проксирует запрос во внутренний `/reload` апдейтера). Включается
+переменной `SITES_RELOAD_TOKEN` в `.env`, авторизация — заголовком:
+
+```sh
+curl -X POST -H "Authorization: Bearer $TOKEN" https://aaaver.ru/api/sites-reload
+```
+
+| Код | Тело                                | Когда                              |
+| --- | ----------------------------------- | ---------------------------------- |
+| 200 | `{ "ok": true }`                    | цикл прошёл, sites/ актуален       |
+| 401 | `{ "error": "unauthorized" }`       | нет/неверный токен                 |
+| 404 | `{ "error": "disabled" }`           | `SITES_RELOAD_TOKEN` не задан      |
+| 409 | `{ "ok": false, "busy": true }`     | цикл уже идёт — просто подожди     |
+| 502 | `{ "error": "updater-unavailable" }`| контейнер апдейтера лежит          |

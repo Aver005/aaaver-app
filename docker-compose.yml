@@ -11,6 +11,7 @@ services:
       PORT: 3000
       DATABASE_PATH: /data/aaaver.db
       SITES_DIR: /sites
+      SITES_UPDATER_URL: http://sites-updater:8484
     volumes:
       # БД живёт на хосте: ./data/aaaver.db можно копировать, бэкапить
       # и подменять без пересборки контейнера

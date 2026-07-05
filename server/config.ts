@@ -12,6 +12,10 @@ export const config = {
     dbPath: process.env.DATABASE_PATH ?? './data/aaaver.db',
     /** каталог с демками: каждая папка `<slug>/` с index.html = роут `/<slug>/` */
     sitesDir: process.env.SITES_DIR ?? './sites',
+    /** внутренний /reload апдейтера; в докере — имя сервиса из compose */
+    sitesUpdaterUrl: process.env.SITES_UPDATER_URL ?? 'http://localhost:8484',
+    /** токен для POST /api/sites-reload; пустой = эндпоинт выключен */
+    sitesReloadToken: process.env.SITES_RELOAD_TOKEN ?? '',
 
     botToken: process.env.TELEGRAM_BOT_TOKEN ?? '',
     chatId: process.env.TELEGRAM_CHAT_ID ?? '',

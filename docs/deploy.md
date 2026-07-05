@@ -188,7 +188,17 @@ jobs:
   способ — для демок, которых в конфиге нет;
 - прогнать цикл руками: `docker compose run --rm sites-updater bun
   scripts/sites-updater.ts --once` (или просто смотри логи:
-  `docker compose logs -f sites-updater`).
+  `docker compose logs -f sites-updater`);
+- не ждать цикла: впиши `SITES_RELOAD_TOKEN` в `.env` (сгенерировать:
+  `openssl rand -hex 32`), пересоздай контейнеры — и форс-проверка
+  доступна снаружи:
+
+  ```sh
+  curl -X POST -H "Authorization: Bearer $TOKEN" https://aaaver.ru/api/sites-reload
+  ```
+
+  Этот же вызов можно добавить финальным шагом в CI демки — тогда
+  обновление на сайте становится мгновенным, без ожидания опроса.
 
 ## Реверс-прокси и HTTPS
 

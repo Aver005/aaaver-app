@@ -18,7 +18,7 @@ const SITES_DIR = process.env.SITES_DIR ?? './sites'
 const CONFIG_PATH = process.env.SITES_CONFIG ?? './sites.config.json'
 const GITHUB_API = process.env.GITHUB_API ?? 'https://api.github.com'
 const GITLAB_API = process.env.GITLAB_API ?? 'https://gitlab.com/api/v4'
-const POLL_MS = clampMinutes(process.env.SITES_POLL_MINUTES, 10) * 60 * 1000
+const POLL_MS = num(process.env.SITES_POLL_MINUTES, 10) * 60 * 1000
 
 const DEFAULT_ASSET = 'dist.tar.gz'
 const MAX_ASSET_BYTES = 200 * 1024 * 1024
@@ -43,7 +43,7 @@ interface ReleaseAsset {
     headers: Record<string, string>
 }
 
-function clampMinutes(value: string | undefined, fallback: number): number {
+function num(value: string | undefined, fallback: number): number {
     const n = Number(value)
     return Number.isFinite(n) && n >= 1 ? n : fallback
 }
@@ -262,8 +262,9 @@ async function checkSite(slug: string, source: SiteSource): Promise<void> {
 }
 
 let busy = false
-async function cycle(): Promise<void> {
-    if (busy) return
+/** false — цикл уже шёл, повторный запуск проигнорирован */
+async function cycle(): Promise<boolean> {
+    if (busy) return false
     busy = true
     try {
         const config = await loadConfig()
@@ -277,6 +278,7 @@ async function cycle(): Promise<void> {
     } finally {
         busy = false
     }
+    return true
 }
 
 /** Обломки прерванных деплоев — только на старте, чтобы не мешать deploy-site.bat */
@@ -303,3 +305,23 @@ if (process.argv.includes('--once')) {
 }
 log(`опрашиваю релизы каждые ${POLL_MS / 60000} мин`)
 setInterval(() => void cycle(), POLL_MS)
+
+// форс-проверка по запросу: POST /reload. Порт живёт только внутри
+// docker-сети (наружу не публикуется), снаружи его дёргает основной
+// сервер через /api/sites-reload
+const reloadPort = num(process.env.SITES_RELOAD_PORT, 8484)
+Bun.serve({
+    port: reloadPort,
+    async fetch(req) {
+        const url = new URL(req.url)
+        if (req.method === 'POST' && url.pathname === '/reload') {
+            log('форс-проверка по /reload')
+            const ran = await cycle()
+            return Response.json(ran ? { ok: true } : { ok: false, busy: true }, {
+                status: ran ? 200 : 409,
+            })
+        }
+        return Response.json({ error: 'not-found' }, { status: 404 })
+    },
+})
+log(`/reload на :${reloadPort}`)
