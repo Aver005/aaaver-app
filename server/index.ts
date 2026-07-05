@@ -5,6 +5,7 @@ import { resolveChatId } from './lib/telegram'
 import { handleChallenge } from './routes/challenge'
 import { handleContact, retryUndelivered } from './routes/contact'
 import { handleGithubRepos } from './routes/github'
+import { handleSites } from './routes/sites'
 import { serveStatic } from './lib/static'
 
 const server = Bun.serve({
@@ -14,6 +15,7 @@ const server = Bun.serve({
         '/api/challenge': { POST: handleChallenge },
         '/api/contact': { POST: handleContact },
         '/api/github/repos': { GET: handleGithubRepos },
+        '/api/sites': { GET: handleSites },
     },
     fetch(req) {
         const url = new URL(req.url)

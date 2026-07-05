@@ -10,6 +10,8 @@ function clamp(value: number, min: number, max: number): number {
 export const config = {
     port: num(process.env.PORT, 3000),
     dbPath: process.env.DATABASE_PATH ?? './data/aaaver.db',
+    /** каталог с демками: каждая папка `<slug>/` с index.html = роут `/<slug>/` */
+    sitesDir: process.env.SITES_DIR ?? './sites',
 
     botToken: process.env.TELEGRAM_BOT_TOKEN ?? '',
     chatId: process.env.TELEGRAM_CHAT_ID ?? '',

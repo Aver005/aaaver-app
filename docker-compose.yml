@@ -10,10 +10,13 @@ services:
       # внутри контейнера всегда так, что бы ни лежало в .env
       PORT: 3000
       DATABASE_PATH: /data/aaaver.db
+      SITES_DIR: /sites
     volumes:
       # БД живёт на хосте: ./data/aaaver.db можно копировать, бэкапить
       # и подменять без пересборки контейнера
       - ./data:/data
+      # демки: ./sites/<slug>/ на хосте = https://.../<slug>/, тоже без пересборки
+      - ./sites:/sites:ro
     healthcheck:
       test:
         - CMD
