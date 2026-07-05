@@ -1,0 +1,70 @@
+# Автодеплой на VDS при пуше в master: typecheck → ssh → git pull +
+# docker compose up --build → проверка /api/health.
+#
+# Нужны секреты репозитория (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST     ip или домен VDS
+#   DEPLOY_USER     ssh-пользователь
+#   DEPLOY_SSH_KEY  приватный ssh-ключ (лучше отдельный, только для деплоя)
+#   DEPLOY_PATH     путь к репе на сервере (необязательно, по умолчанию aaaver-app)
+
+name: deploy
+
+on:
+  push:
+    branches: [master]
+
+# деплои не накладываются друг на друга: новый ждёт, пока закончится текущий
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Настройка ssh
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Деплой
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            bash -s -- "$DEPLOY_PATH" << 'EOF'
+          set -euo pipefail
+          cd "${1:-aaaver-app}"
+          git pull --ff-only
+          docker compose up --build -d
+          # мусор от пересборок копится быстро, VDS не резиновый
+          docker image prune -f
+          EOF
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Проверка, что сайт жив
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            bash -s -- "$DEPLOY_PATH" << 'EOF'
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:6110/api/health > /dev/null; then
+              echo 'здоров'; exit 0
+            fi
+            sleep 2
+          done
+          echo 'контейнер не поднялся, последние логи:'
+          cd "${1:-aaaver-app}" && docker compose logs --tail 50 app
+          exit 1
+          EOF
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}

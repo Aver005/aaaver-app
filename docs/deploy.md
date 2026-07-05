@@ -33,6 +33,34 @@ git pull && docker compose up --build -d
 настройки берёт из `.env`: `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_KEY`,
 `DEPLOY_PATH`, `DEPLOY_COMMAND`).
 
+### Автодеплой при пуше
+
+`.github/workflows/deploy.yml` делает то же самое сам на каждый пуш
+в master: typecheck → ssh на VDS → `git pull && docker compose up
+--build -d` → ждёт, пока `/api/health` не ответит (иначе валит workflow
+и печатает логи контейнера). Одновременные деплои не накладываются —
+второй ждёт первого.
+
+Разовая настройка — завести отдельный ключ для деплоя и три секрета:
+
+```sh
+# локально или на VDS
+ssh-keygen -t ed25519 -f deploy_key -N '' -C 'github-actions deploy'
+cat deploy_key.pub >> ~/.ssh/authorized_keys   # на VDS, под деплой-юзером
+```
+
+В репе GitHub → Settings → Secrets and variables → Actions:
+
+| Секрет           | Значение                                       |
+| ---------------- | ---------------------------------------------- |
+| `DEPLOY_HOST`    | ip или домен VDS                               |
+| `DEPLOY_USER`    | ssh-пользователь                               |
+| `DEPLOY_SSH_KEY` | содержимое приватного `deploy_key` целиком     |
+| `DEPLOY_PATH`    | путь к репе на сервере (не нужен, если `aaaver-app`) |
+
+`deploy.bat` при этом никуда не девается — это ручной запасной ход,
+когда нужно задеплоить, не пуша.
+
 ## База данных
 
 SQLite лежит на хосте: `./data/aaaver.db` (+ служебные `-wal`/`-shm`).

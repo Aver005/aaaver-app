@@ -58,8 +58,12 @@ docker compose up --build -d
 sqlite3 data/aaaver.db ".backup data/backup-$(date +%F).db"
 ```
 
-Деплой на VDS сводится к `git pull && docker compose up --build -d`
-(на винде есть `deploy.bat`, который делает это по ssh).
+Деплой автоматический: пуш в master прогоняет typecheck и через ssh
+обновляет VDS, после чего проверяет `/api/health`
+([deploy.yml](.github/workflows/deploy.yml), нужны секреты
+`DEPLOY_HOST`/`DEPLOY_USER`/`DEPLOY_SSH_KEY`). Руками то же самое:
+`git pull && docker compose up --build -d` на сервере или `deploy.bat`
+с винды.
 
 ## Демки проектов
 
