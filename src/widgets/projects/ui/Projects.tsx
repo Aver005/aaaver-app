@@ -2,6 +2,7 @@ import { useI18n } from '@/shared/i18n'
 import { cn } from '@/shared/lib/cn'
 import { Section, Reveal } from '@/shared/ui'
 import { PROJECTS, SIBLINGS, ProjectCard, SiblingCard, type SiblingPair } from '@/entities/project'
+import { useLiveSites } from '../model/useLiveSites'
 
 /** Индекс, с которого начинается SiblingPair в общем списке */
 const SIBLING_INDEX = 1
@@ -9,6 +10,7 @@ type ProjectListItem = (typeof PROJECTS)[number] | SiblingPair
 
 export function Projects() {
     const { t } = useI18n()
+    const liveSites = useLiveSites()
 
     const items: ProjectListItem[] = [
         ...PROJECTS.slice(0, SIBLING_INDEX),
@@ -58,7 +60,7 @@ export function Projects() {
                                     delay={0.08 + i * 0.06}
                                     className={shellClassName}
                                 >
-                                    <SiblingCard pair={item} index={index} />
+                                    <SiblingCard pair={item} index={index} liveSites={liveSites} />
                                 </Reveal>
                             )
                         }
@@ -71,6 +73,7 @@ export function Projects() {
                                     project={project}
                                     index={index}
                                     reversed={i % 2 === 1}
+                                    liveSites={liveSites}
                                 />
                             </Reveal>
                         )

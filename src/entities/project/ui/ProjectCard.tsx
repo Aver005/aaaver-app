@@ -5,11 +5,14 @@ import { useI18n } from '@/shared/i18n'
 import { Tag } from '@/shared/ui'
 import { cn } from '@/shared/lib/cn'
 import type { Project } from '../model/types'
+import { projectLink } from '../model/link'
 
 interface ProjectCardProps {
     project: Project
     index: number
     reversed?: boolean
+    /** Слаги живых демок: для них карточка ведёт на /<slug>/ вместо ссылки из данных */
+    liveSites?: ReadonlySet<string>
 }
 
 /**
@@ -29,9 +32,16 @@ interface ProjectCardProps {
  * ряд миниатюр для его переключения, а само изображение и ссылка «visit»
  * получают собственные `<a>`.
  */
-export function ProjectCard({ project, index, reversed = false }: ProjectCardProps) {
+export function ProjectCard({
+    project,
+    index,
+    reversed = false,
+    liveSites = new Set(),
+}: ProjectCardProps) {
     const { t, lx } = useI18n()
     const number = String(index + 1).padStart(2, '0')
+    const link = projectLink(project, liveSites)
+    const visitLabel = link && (link.kind === 'repo' ? t.projects.visitRepo : t.projects.visitSite)
 
     const gallery = project.gallery && project.gallery.length >= 2 ? project.gallery : null
     const [activeIndex, setActiveIndex] = useState(0)
@@ -88,17 +98,17 @@ export function ProjectCard({ project, index, reversed = false }: ProjectCardPro
                 ))}
             </div>
 
-            {project.url && (
+            {link && (
                 <div className="mt-7 flex justify-end">
                     {gallery ? (
                         <a
-                            href={project.url}
+                            href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2.5 text-right font-mono text-xs uppercase tracking-[0.22em] text-paper-faint transition-colors duration-300 hover:text-ember"
                         >
                             <span className="h-px w-8 bg-current/35 transition-all duration-300 group-hover:w-12" />
-                            {t.projects.visit}
+                            {visitLabel}
                             <ArrowUpRight
                                 size={14}
                                 className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -107,7 +117,7 @@ export function ProjectCard({ project, index, reversed = false }: ProjectCardPro
                     ) : (
                         <span className="inline-flex items-center gap-2.5 text-right font-mono text-xs uppercase tracking-[0.22em] text-paper-faint transition-colors duration-300 group-hover:text-ember">
                             <span className="h-px w-8 bg-current/35 transition-all duration-300 group-hover:w-12" />
-                            {t.projects.visit}
+                            {visitLabel}
                             <ArrowUpRight
                                 size={14}
                                 className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -120,9 +130,9 @@ export function ProjectCard({ project, index, reversed = false }: ProjectCardPro
     )
 
     if (gallery) {
-        const AccentRoot = (project.url ? 'a' : 'div') as 'div'
-        const accentLinkProps = project.url
-            ? { href: project.url, target: '_blank', rel: 'noopener noreferrer' }
+        const AccentRoot = (link ? 'a' : 'div') as 'div'
+        const accentLinkProps = link
+            ? { href: link.url, target: '_blank', rel: 'noopener noreferrer' }
             : {}
 
         return (
@@ -190,9 +200,9 @@ export function ProjectCard({ project, index, reversed = false }: ProjectCardPro
         )
     }
 
-    const Root = (project.url ? 'a' : 'article') as 'a'
-    const linkProps = project.url
-        ? { href: project.url, target: '_blank', rel: 'noopener noreferrer' }
+    const Root = (link ? 'a' : 'article') as 'a'
+    const linkProps = link
+        ? { href: link.url, target: '_blank', rel: 'noopener noreferrer' }
         : {}
 
     return (

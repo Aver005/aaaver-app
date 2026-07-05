@@ -67,3 +67,11 @@ export async function fetchRepos(): Promise<RepoInfo[]> {
     if (!res.ok) throw new Error(`repos ${res.status}`)
     return res.json()
 }
+
+/** Слаги живых демок, смонтированных на сервере как /<slug>/ */
+export async function fetchSites(): Promise<string[]> {
+    const res = await fetch('/api/sites')
+    if (!res.ok) throw new Error(`sites ${res.status}`)
+    const data = (await res.json()) as { sites?: string[] }
+    return data.sites ?? []
+}

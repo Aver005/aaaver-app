@@ -44,7 +44,8 @@ const ru = {
     projects: {
         title: 'Проекты',
         subtitle: 'Избранное из продакшена — то, что можно потрогать руками.',
-        visit: 'Открыть сайт',
+        visitSite: 'Подробнее о проекте',
+        visitRepo: 'Репозиторий проекта',
     },
     openSource: {
         title: 'Open Source',
@@ -155,7 +156,8 @@ const en: typeof ru = {
     projects: {
         title: 'Projects',
         subtitle: 'Selected production work — things you can actually try.',
-        visit: 'Visit site',
+        visitSite: 'More about the project',
+        visitRepo: 'Project repository',
     },
     openSource: {
         title: 'Open Source',

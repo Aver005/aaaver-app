@@ -2,10 +2,13 @@ import { ArrowUpRight } from 'lucide-react'
 import { useI18n } from '@/shared/i18n'
 import { Tag } from '@/shared/ui'
 import type { SiblingPair } from '../model/types'
+import { projectLink } from '../model/link'
 
 interface SiblingCardProps {
     pair: SiblingPair
     index: number
+    /** Слаги живых демок: для них карточка ведёт на /<slug>/ вместо ссылки из данных */
+    liveSites?: ReadonlySet<string>
 }
 
 /**
@@ -15,7 +18,7 @@ interface SiblingCardProps {
  * идут ниже, отделённые только отступами и типографикой. Связка `&`
  * между двумя проектами — единственный декоративный акцент.
  */
-export function SiblingCard({ pair, index }: SiblingCardProps) {
+export function SiblingCard({ pair, index, liveSites = new Set() }: SiblingCardProps) {
     const { t, lx } = useI18n()
     const number = `${String(index + 1).padStart(2, '0')}/${String(index + 2).padStart(2, '0')}`
 
@@ -46,9 +49,10 @@ export function SiblingCard({ pair, index }: SiblingCardProps) {
 
                 {pair.brothers.map((project, i) => {
                     const isFirst = i === 0
-                    const Root = (project.url ? 'a' : 'article') as 'a'
-                    const linkProps = project.url
-                        ? { href: project.url, target: '_blank', rel: 'noopener noreferrer' }
+                    const link = projectLink(project, liveSites)
+                    const Root = (link ? 'a' : 'article') as 'a'
+                    const linkProps = link
+                        ? { href: link.url, target: '_blank', rel: 'noopener noreferrer' }
                         : {}
                     const brotherNumber = String(index + i + 1).padStart(2, '0')
 
@@ -99,11 +103,13 @@ export function SiblingCard({ pair, index }: SiblingCardProps) {
                                         ))}
                                     </div>
 
-                                    {project.url && (
+                                    {link && (
                                         <div className="mt-5 flex justify-end">
                                             <span className="inline-flex items-center gap-2.5 text-right font-mono text-xs uppercase tracking-[0.22em] text-paper-faint transition-colors duration-300 group-hover/side:text-ember">
                                                 <span className="h-px w-8 bg-current/35 transition-all duration-300 group-hover/side:w-12" />
-                                                {t.projects.visit}
+                                                {link.kind === 'repo'
+                                                    ? t.projects.visitRepo
+                                                    : t.projects.visitSite}
                                                 <ArrowUpRight
                                                     size={14}
                                                     className="transition-transform duration-300 group-hover/side:-translate-y-0.5 group-hover/side:translate-x-0.5"

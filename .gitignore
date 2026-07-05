@@ -9,3 +9,4 @@ sites
 .DS_Store
 *.log
 .dev
+.playwright-mcp
