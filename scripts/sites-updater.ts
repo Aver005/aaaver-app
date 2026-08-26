@@ -1,10 +1,20 @@
 /**
- * Автодеплой демок: опрашивает релизы GitHub/GitLab по sites.config.json,
+ * Автодеплой демок: опрашивает релизы GitHub/GitLab по реестру в базе,
  * скачивает архив с собранным сайтом и атомарно подменяет sites/<slug>/.
  *
  * Запуск: bun scripts/sites-updater.ts [--once]
  * В докере крутится отдельным сервисом (см. docker-compose.yml) — у него,
  * в отличие от основного сервера, каталог sites смонтирован на запись.
+ *
+ * ═══ РАЗДЕЛЕНИЕ ОБЯЗАННОСТЕЙ ═══
+ *
+ * Реестр этот процесс только ЧИТАЕТ — пишет в него панель. Диск, наоборот,
+ * он единственный, кто пишет: основному серверу каталог демок смонтирован
+ * read-only, и это главная граница проекта. Направления не пересекаются,
+ * поэтому договариваться двум процессам не о чем.
+ *
+ * Миграции он тоже не применяет — их владелец сервер. Если панель ещё не
+ * поднялась и таблицы нет, цикл честно пропускается до следующего раза.
  *
  * Контракт с демками: CI демки публикует релиз с тегом `latest` и ассетом
  * `dist.tar.gz`, внутри которого index.html лежит в корне
@@ -12,10 +22,10 @@
  */
 import { mkdir, readdir, rename, rm } from 'node:fs/promises'
 import { join } from 'node:path'
+import { listEnabledSources, type SiteSource } from '../server/db/sites'
 import { RESERVED, SLUG_RE } from '../server/lib/static/sites'
 
 const SITES_DIR = process.env.SITES_DIR ?? './sites'
-const CONFIG_PATH = process.env.SITES_CONFIG ?? './sites.config.json'
 const GITHUB_API = process.env.GITHUB_API ?? 'https://api.github.com'
 const GITLAB_API = process.env.GITLAB_API ?? 'https://gitlab.com/api/v4'
 const POLL_MS = num(process.env.SITES_POLL_MINUTES, 10) * 60 * 1000
@@ -23,15 +33,6 @@ const POLL_MS = num(process.env.SITES_POLL_MINUTES, 10) * 60 * 1000
 const DEFAULT_ASSET = 'dist.tar.gz'
 const MAX_ASSET_BYTES = 200 * 1024 * 1024
 const USER_AGENT = 'aaaver-sites-updater'
-
-interface SiteSource {
-    /** `github:owner/repo` или `gitlab:group/project` */
-    repo: string
-    /** имя ассета в релизе */
-    asset?: string
-    /** конкретный тег; без него — `latest`, а затем последний релиз */
-    tag?: string
-}
 
 interface ReleaseAsset {
     /** демка переустанавливается, когда меняется эта строка */
@@ -82,7 +83,7 @@ async function githubAsset(repo: string, source: SiteSource): Promise<ReleaseAss
     }
     if (!release) return null
 
-    const name = source.asset ?? DEFAULT_ASSET
+    const name = source.asset || DEFAULT_ASSET
     const asset = (release.assets ?? []).find((a: any) => a.name === name)
     if (!asset) return null
 
@@ -109,7 +110,7 @@ async function gitlabAsset(repo: string, source: SiteSource): Promise<ReleaseAss
     const release: any = await fetchJson(url, headers)
     if (!release) return null
 
-    const name = source.asset ?? DEFAULT_ASSET
+    const name = source.asset || DEFAULT_ASSET
     const link = (release.assets?.links ?? []).find((l: any) => l.name === name)
     if (!link) return null
 
@@ -219,37 +220,26 @@ async function currentVersion(slug: string): Promise<string | null> {
     }
 }
 
-function parseRepo(spec: string): { provider: 'github' | 'gitlab'; repo: string } | null {
-    const match = spec.match(/^(github|gitlab):(.+)$/)
-    if (!match) return null
-    return { provider: match[1] as 'github' | 'gitlab', repo: match[2]! }
+/**
+ * Реестр берётся из базы. Проверка слага здесь ВТОРАЯ — первая стоит в API
+ * панели, а форма таблицы закреплена CHECK-ограничением. Дубль намеренный:
+ * именно этот процесс превращает слаг в путь на диске, и цена ошибки тут не
+ * «некрасивый URL», а запись мимо каталога демок.
+ */
+async function loadRegistry(): Promise<SiteSource[]> {
+    const sources = await listEnabledSources()
+    return sources.filter((source) => {
+        if (SLUG_RE.test(source.slug) && !RESERVED.has(source.slug)) return true
+        log(`пропускаю "${source.slug}": слаг занят или не [a-z0-9-]`)
+        return false
+    })
 }
 
-async function loadConfig(): Promise<Record<string, SiteSource>> {
-    const file = Bun.file(CONFIG_PATH)
-    if (!(await file.exists())) {
-        log(`конфига ${CONFIG_PATH} нет — нечего обновлять`)
-        return {}
-    }
-    const raw = (await file.json()) as Record<string, SiteSource>
-    const valid: Record<string, SiteSource> = {}
-    for (const [slug, source] of Object.entries(raw)) {
-        if (!SLUG_RE.test(slug) || RESERVED.has(slug)) {
-            log(`пропускаю "${slug}": слаг занят или не [a-z0-9-]`)
-        } else if (typeof source?.repo !== 'string' || !parseRepo(source.repo)) {
-            log(`пропускаю "${slug}": repo должен быть "github:owner/repo" или "gitlab:group/project"`)
-        } else {
-            valid[slug] = source
-        }
-    }
-    return valid
-}
-
-async function checkSite(slug: string, source: SiteSource): Promise<void> {
-    const { provider, repo } = parseRepo(source.repo)!
+async function checkSite(source: SiteSource): Promise<void> {
+    const { slug, provider, repo } = source
     const asset = await (provider === 'github' ? githubAsset : gitlabAsset)(repo, source)
     if (!asset) {
-        log(`${slug}: у ${source.repo} нет релиза с ${source.asset ?? DEFAULT_ASSET}`)
+        log(`${slug}: у ${provider}:${repo} нет релиза с ${source.asset || DEFAULT_ASSET}`)
         return
     }
     if (asset.version === (await currentVersion(slug))) {
@@ -267,12 +257,24 @@ async function cycle(): Promise<boolean> {
     if (busy) return false
     busy = true
     try {
-        const config = await loadConfig()
-        for (const [slug, source] of Object.entries(config)) {
+        let registry: SiteSource[]
+        try {
+            registry = await loadRegistry()
+        } catch (err) {
+            // Реестр недоступен — база лежит или сервер ещё не накатил схему.
+            // Это не повод падать: следующий цикл попробует снова, а уже
+            // развёрнутые демки всё это время продолжают раздаваться.
+            console.error('[updater] реестр недоступен:', err instanceof Error ? err.message : err)
+            return true
+        }
+
+        if (registry.length === 0) log('в реестре ни одного включённого сайта')
+
+        for (const source of registry) {
             try {
-                await checkSite(slug, source)
+                await checkSite(source)
             } catch (err) {
-                console.error(`[updater] ${slug}:`, err instanceof Error ? err.message : err)
+                console.error(`[updater] ${source.slug}:`, err instanceof Error ? err.message : err)
             }
         }
     } finally {
@@ -297,7 +299,7 @@ async function cleanupStaleUploads(): Promise<void> {
 await mkdir(SITES_DIR, { recursive: true })
 await cleanupStaleUploads()
 
-log(`каталог демок: ${SITES_DIR}, конфиг: ${CONFIG_PATH}`)
+log(`каталог демок: ${SITES_DIR}, реестр: таблица sites`)
 await cycle()
 
 if (process.argv.includes('--once')) {

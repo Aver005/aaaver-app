@@ -2,22 +2,26 @@
 
 Мой сайт-портфолио. React SPA плюс маленький сервер на Bun, который раздаёт
 статику, принимает сообщения с формы и пересылает их мне в Telegram.
-Сообщения дублируются в SQLite, так что даже если Telegram лежит — ничего
+Сообщения дублируются в базе, так что даже если Telegram лежит — ничего
 не теряется.
 
 Стек: React 19, TypeScript, Vite 7, Tailwind 4, Motion. Бэкенд — чистый
-`Bun.serve` без единой npm-зависимости, база — `bun:sqlite`. Структура
+`Bun.serve` без единой npm-зависимости; база — Postgres через встроенный
+в Bun клиент, так что зависимостей по-прежнему ноль. Структура
 фронтенда — FSD (`app / pages / widgets / features / entities / shared`).
 
 ## Запуск локально
 
-Нужен [Bun](https://bun.sh) 1.3+.
+Нужен [Bun](https://bun.sh) 1.4+ и доступный Postgres.
 
 ```sh
 bun install
-cp .env.example .env   # вписать TELEGRAM_BOT_TOKEN
+cp .env.example .env   # вписать DATABASE_URL и TELEGRAM_BOT_TOKEN
 bun dev                # vite на :5173, api на :3001
 ```
+
+Схему сервер накатывает сам при старте. Без базы он тоже поднимется —
+статика будет отдаваться, а всё, что ходит в базу, ответит 503.
 
 Прод-вариант без докера:
 
@@ -50,13 +54,9 @@ cp .env.example .env   # токен бота обязателен
 docker compose up --build -d
 ```
 
-Сайт поднимется на `:6110`. База лежит на хосте в `./data/aaaver.db` —
-её можно копировать, скачивать и подменять, контейнер для этого
-пересобирать не нужно. Бэкап одной строкой:
-
-```sh
-sqlite3 data/aaaver.db ".backup data/backup-$(date +%F).db"
-```
+Сайт поднимется на `:6110`. База — общий Postgres стека, своя роль и своя
+база; как её завести и как переехать со старой SQLite, написано в
+[docs/deploy.md](docs/deploy.md#база-данных).
 
 Деплой автоматический: пуш в master прогоняет typecheck и через ssh
 обновляет VDS, после чего проверяет `/api/health`
@@ -72,7 +72,7 @@ sqlite3 data/aaaver.db ".backup data/backup-$(date +%F).db"
 сайт на `/poopseek/`, без пересборки и рестарта. Заливается одной
 командой: `deploy-site.bat poopseek E:\путь\к\dist`.
 
-А можно вообще без рук: `sites.config.json` привязывает слаг к репе
+А можно вообще без рук: реестр в панели привязывает слаг к репе
 (`github:owner/repo` или `gitlab:group/project`), и сервис
 `sites-updater` сам подтягивает свежий `dist.tar.gz` из релизов —
 демке достаточно 7-строчного workflow, который переиспользует
@@ -93,6 +93,7 @@ slide-to-send вместо кнопки и honeypot-поле. Плюс лими�
 - [docs/anti-spam.md](docs/anti-spam.md) — защита формы и её настройка
 - [docs/deploy.md](docs/deploy.md) — деплой на VDS, nginx, бэкапы
 - [docs/new-site.md](docs/new-site.md) — чеклист: добавить демку на `/<slug>/`
+- [docs/admin.md](docs/admin.md) — панель управления и вход через SSO
 - [docs/content.md](docs/content.md) — где менять тексты и проекты
 
 ## Переменные окружения
@@ -100,10 +101,10 @@ slide-to-send вместо кнопки и honeypot-поле. Плюс лими�
 | Переменная            | Зачем                                            | По умолчанию      |
 | --------------------- | ------------------------------------------------ | ----------------- |
 | `PORT`                | порт сервера                                     | `3000`            |
-| `DATABASE_PATH`       | путь к файлу SQLite                              | `./data/aaaver.db` |
+| `DATABASE_URL`        | Postgres, обязательно с `sslmode=require`        | — (обязательна)   |
 | `SITES_DIR`           | каталог с демками (`<slug>/` → роут `/<slug>/`)  | `./sites`         |
 | `SITES_POLL_MINUTES`  | период опроса релизов апдейтером                 | `10`              |
-| `GITHUB_TOKEN`        | для приватных реп в `sites.config.json`          | —                 |
+| `GITHUB_TOKEN`        | для приватных реп из реестра демок               | —                 |
 | `GITLAB_TOKEN`        | то же для GitLab (+ `GITLAB_API` для self-hosted) | —                |
 | `TELEGRAM_BOT_TOKEN`  | токен бота                                       | —                 |
 | `TELEGRAM_CHAT_ID`    | кому слать (можно не задавать, см. выше)         | автоопределение   |
@@ -111,3 +112,5 @@ slide-to-send вместо кнопки и honeypot-поле. Плюс лими�
 | `RATE_LIMIT_PER_HOUR` | сообщений с одного IP в час                      | `5`               |
 | `RATE_LIMIT_PER_DAY`  | сообщений с одного IP в сутки                    | `20`              |
 | `TRUST_PROXY`         | `1`, если сервер за nginx/caddy                  | `0`               |
+| `SSO_CLIENT_SECRET`   | секрет клиента из панели; пусто = админка выключена | —              |
+| `ADMIN_EMAILS`        | кого пускать в `/admin`, через запятую           | —                 |

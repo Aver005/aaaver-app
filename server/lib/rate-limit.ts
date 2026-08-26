@@ -1,25 +1,36 @@
-import { db } from '../db'
+import { sql } from '../db'
 
 type AttemptKind = 'contact' | 'challenge'
 
-function countSince(ip: string, kind: AttemptKind, sinceMs: number): number {
-    const row = db
-        .query('SELECT COUNT(*) AS n FROM attempts WHERE ip = ? AND kind = ? AND at > ?')
-        .get(ip, kind, Date.now() - sinceMs) as { n: number }
-    return row.n
+/**
+ * `count(*)::int`, а не голый `count(*)`.
+ *
+ * Postgres отдаёт bigint СТРОКОЙ — «12», а не 12. Само сравнение с числом
+ * ещё сработало бы (JS привёл бы строку к числу), но в типах у нас стоял бы
+ * `number`, в котором лежит строка, и первая же арифметика над ним превратила
+ * бы сложение в склейку. Приведение в SQL убирает ложь в типе там, где она
+ * возникает.
+ */
+async function countSince(ip: string, kind: AttemptKind, window: string): Promise<number> {
+    const [row] = await sql`
+        SELECT count(*)::int AS n
+        FROM attempts
+        WHERE ip = ${ip} AND kind = ${kind} AND at > now() - ${window}::interval
+    `
+    return (row?.n as number | undefined) ?? 0
 }
 
-export function registerAttempt(ip: string, kind: AttemptKind): void {
-    db.run('INSERT INTO attempts (ip, kind, at) VALUES (?, ?, ?)', [ip, kind, Date.now()])
+export async function registerAttempt(ip: string, kind: AttemptKind): Promise<void> {
+    await sql`INSERT INTO attempts (ip, kind) VALUES (${ip}, ${kind})`
 }
 
-export function isRateLimited(
+export async function isRateLimited(
     ip: string,
     kind: AttemptKind,
     perHour: number,
     perDay?: number,
-): boolean {
-    if (countSince(ip, kind, 60 * 60 * 1000) >= perHour) return true
-    if (perDay !== undefined && countSince(ip, kind, 24 * 60 * 60 * 1000) >= perDay) return true
+): Promise<boolean> {
+    if ((await countSince(ip, kind, '1 hour')) >= perHour) return true
+    if (perDay !== undefined && (await countSince(ip, kind, '24 hours')) >= perDay) return true
     return false
 }

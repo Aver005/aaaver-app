@@ -80,7 +80,7 @@ POST /api/contact ────────────────→ rate-limit
 ```
 
 Если Telegram недоступен или chat_id ещё не известен — сообщение лежит
-в SQLite с `delivered = 0`, фоновая задача дошлёт его позже (раз в 10
+в базе с `delivered = 0`, фоновая задача дошлёт его позже (раз в 10
 минут, до 20 попыток).
 
 ## Как покрутить
@@ -97,5 +97,6 @@ TRUST_PROXY=0            # 1 — если за реверс-прокси
 Посмотреть, что прилетало, включая спам:
 
 ```sh
-sqlite3 data/aaaver.db "SELECT id, name, delivered, spam_flags, datetime(created_at,'unixepoch') FROM messages ORDER BY id DESC LIMIT 20;"
+docker exec -it pg psql -U aaaver -d aaaverdb \
+  -c 'SELECT id, name, delivered, spam_flags, created_at FROM messages ORDER BY id DESC LIMIT 20;'
 ```

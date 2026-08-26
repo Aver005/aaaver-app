@@ -1,5 +1,5 @@
 import { config } from '../config'
-import { db } from '../db'
+import { requireDb, sql } from '../db'
 import { verifyPow } from '../lib/pow'
 import { getClientIp, json, type BunServer } from '../lib/http'
 import { isRateLimited, registerAttempt } from '../lib/rate-limit'
@@ -59,13 +59,14 @@ function parseBody(raw: unknown): ContactBody | null {
  *
  * Мягкие сигналы пишутся в spam_flags и уходят в Telegram как пометка:
  *   honeypot-заполнен (такое письмо вообще не отправляется), слабый жест
- *   слайдера. Сообщение в любом случае остаётся в SQLite.
+ *   слайдера. Сообщение в любом случае остаётся в базе.
  */
 export async function handleContact(req: Request, server: BunServer): Promise<Response> {
+    requireDb()
     const ip = getClientIp(req, server)
     const userAgent = req.headers.get('user-agent') ?? ''
 
-    if (isRateLimited(ip, 'contact', config.ratePerHour, config.ratePerDay)) {
+    if (await isRateLimited(ip, 'contact', config.ratePerHour, config.ratePerDay)) {
         return json({ error: 'rate-limit' }, 429)
     }
 
@@ -77,24 +78,25 @@ export async function handleContact(req: Request, server: BunServer): Promise<Re
     }
     if (!body) return json({ error: 'validation' }, 400)
 
-    registerAttempt(ip, 'contact')
+    await registerAttempt(ip, 'contact')
 
-    // одноразовость через UPDATE: повторное использование не пройдёт даже в гонке
-    const consumed = db.run(
-        'UPDATE challenges SET consumed_at = ? WHERE id = ? AND consumed_at IS NULL AND issued_at > ?',
-        [Date.now(), body.challengeId, Date.now() - config.challengeTtlMs],
-    )
-    if (consumed.changes !== 1) return json({ error: 'captcha' }, 403)
+    // Одноразовость через UPDATE: повторное использование не пройдёт даже в
+    // гонке. `RETURNING` заодно отдаёт нужные поля — отдельный SELECT после
+    // погашения читал бы ту же строку второй раз без всякой пользы.
+    const [challenge] = await sql`
+        UPDATE challenges SET consumed_at = now()
+        WHERE id = ${body.challengeId}
+          AND consumed_at IS NULL
+          AND issued_at > now() - ${`${config.challengeTtlMs} milliseconds`}::interval
+        RETURNING salt, difficulty, issued_at
+    `
+    if (!challenge) return json({ error: 'captcha' }, 403)
 
-    const challenge = db
-        .query('SELECT salt, difficulty, issued_at FROM challenges WHERE id = ?')
-        .get(body.challengeId) as { salt: string; difficulty: number; issued_at: number }
-
-    if (!verifyPow(challenge.salt, body.nonce, challenge.difficulty)) {
+    if (!verifyPow(challenge.salt as string, body.nonce, challenge.difficulty as number)) {
         return json({ error: 'captcha' }, 403)
     }
 
-    if (Date.now() - challenge.issued_at < config.minSubmitDelayMs) {
+    if (Date.now() - (challenge.issued_at as Date).getTime() < config.minSubmitDelayMs) {
         return json({ error: 'captcha' }, 403)
     }
 
@@ -110,20 +112,17 @@ export async function handleContact(req: Request, server: BunServer): Promise<Re
     }
     if (body.gesture.samples === 0) spamFlags.push('gesture-keyboard')
 
-    const inserted = db.run(
-        `INSERT INTO messages (name, contact, message, locale, ip, user_agent, spam_flags, delivered)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-            body.name,
-            body.contact,
-            body.message,
-            body.locale,
-            ip,
-            userAgent.slice(0, 300),
-            JSON.stringify(spamFlags),
-            isHoneypot ? -1 : 0, // -1: помечено как спам, не доставляем
-        ],
-    )
+    // Явный `::jsonb` обязателен: массив уехал бы в Postgres как массив
+    // Postgres, а колонка ждёт документ. Поэтому сериализуем сами.
+    const [inserted] = await sql`
+        INSERT INTO messages (name, contact, message, locale, ip, user_agent, spam_flags, delivered)
+        VALUES (
+            ${body.name}, ${body.contact}, ${body.message}, ${body.locale},
+            ${ip}, ${userAgent.slice(0, 300)}, ${JSON.stringify(spamFlags)}::jsonb,
+            ${isHoneypot ? -1 : 0}
+        )
+        RETURNING id
+    `
 
     // боту отвечаем «ок», чтобы не подсказывать, что его раскусили
     if (isHoneypot) return json({ ok: true })
@@ -137,27 +136,30 @@ export async function handleContact(req: Request, server: BunServer): Promise<Re
         spamFlags,
     })
 
-    db.run('UPDATE messages SET delivered = ?, delivery_attempts = 1 WHERE id = ?', [
-        delivered ? 1 : 0,
-        inserted.lastInsertRowid,
-    ])
+    await sql`
+        UPDATE messages SET delivered = ${delivered ? 1 : 0}, delivery_attempts = 1
+        WHERE id = ${inserted!.id}
+    `
 
     return json({ ok: true })
 }
 
 /** Фоновая дозагрузка: что не ушло в Telegram сразу — уйдёт позже */
 export async function retryUndelivered(): Promise<void> {
-    const pending = db
-        .query(
-            'SELECT id, name, contact, message, locale, ip, spam_flags FROM messages WHERE delivered = 0 AND delivery_attempts < 20 ORDER BY id LIMIT 10',
-        )
-        .all() as Array<{
-        id: number
+    const pending = (await sql`
+        SELECT id, name, contact, message, locale, ip, spam_flags
+        FROM messages
+        WHERE delivered = 0 AND delivery_attempts < 20
+        ORDER BY id
+        LIMIT 10
+    `) as Array<{
+        id: string
         name: string
         contact: string
         message: string
         locale: string
         ip: string
+        /** jsonb приезжает СТРОКОЙ: Bun.SQL его не разбирает, разбираем сами */
         spam_flags: string
     }>
 
@@ -170,10 +172,11 @@ export async function retryUndelivered(): Promise<void> {
             ip: m.ip,
             spamFlags: JSON.parse(m.spam_flags) as string[],
         })
-        db.run(
-            'UPDATE messages SET delivered = ?, delivery_attempts = delivery_attempts + 1 WHERE id = ?',
-            [ok ? 1 : 0, m.id],
-        )
+        await sql`
+            UPDATE messages
+            SET delivered = ${ok ? 1 : 0}, delivery_attempts = delivery_attempts + 1
+            WHERE id = ${m.id}
+        `
         if (!ok) break // телеграм лежит — не молотим зря
     }
 }

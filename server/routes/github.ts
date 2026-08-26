@@ -1,5 +1,5 @@
 import { config } from '../config'
-import { getSetting, setSetting } from '../db'
+import { getSetting, requireDb, setSetting } from '../db'
 import { json } from '../lib/http'
 
 interface RepoInfo {
@@ -59,12 +59,13 @@ async function fetchFromGithub(): Promise<RepoInfo[]> {
 }
 
 /**
- * GET /api/github/repos — список репозиториев с кэшем в SQLite.
+ * GET /api/github/repos — список репозиториев с кэшем в базе.
  * GitHub даёт всего 60 анонимных запросов в час, поэтому ответ
  * кэшируется на 6 часов, а при недоступности отдаётся протухший кэш.
  */
 export async function handleGithubRepos(): Promise<Response> {
-    const cached = getSetting(CACHE_KEY)
+    requireDb()
+    const cached = await getSetting(CACHE_KEY)
     if (cached) {
         const { fetchedAt, data } = JSON.parse(cached) as { fetchedAt: number; data: RepoInfo[] }
         if (Date.now() - fetchedAt < config.githubCacheTtlMs) return json(data)
@@ -72,7 +73,7 @@ export async function handleGithubRepos(): Promise<Response> {
 
     try {
         const fresh = await fetchFromGithub()
-        setSetting(CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), data: fresh }))
+        await setSetting(CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), data: fresh }))
         return json(fresh)
     } catch {
         if (cached) {

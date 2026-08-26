@@ -16,14 +16,17 @@ function reloadTokenOk(req: Request): boolean {
 }
 
 /**
- * POST /api/sites-reload — форс-проверка релизов, не дожидаясь цикла опроса.
- * Сам сервер писать в sites/ не может (read-only) — проксирует запрос
- * во внутренний /reload апдейтера. Требует Authorization: Bearer <токен>.
+ * Просьба к апдейтеру проверить релизы прямо сейчас.
+ *
+ * Сам сервер писать в `sites/` не может — каталог смонтирован read-only, и
+ * это главная граница проекта. Поэтому здесь ровно проксирование во
+ * внутренний `/reload`, который наружу не опубликован.
+ *
+ * Отдельной функцией, потому что зовут её из двух мест с РАЗНОЙ проверкой
+ * прав: снаружи по токену (для CI), из панели по сессии. Общее у них только
+ * это тело запроса.
  */
-export async function handleSitesReload(req: Request): Promise<Response> {
-    if (!config.sitesReloadToken) return json({ error: 'disabled' }, 404)
-    if (!reloadTokenOk(req)) return json({ error: 'unauthorized' }, 401)
-
+export async function requestUpdaterReload(): Promise<Response> {
     try {
         const res = await fetch(`${config.sitesUpdaterUrl}/reload`, {
             method: 'POST',
@@ -34,4 +37,15 @@ export async function handleSitesReload(req: Request): Promise<Response> {
     } catch {
         return json({ error: 'updater-unavailable' }, 502)
     }
+}
+
+/**
+ * POST /api/sites-reload — форс-проверка релизов, не дожидаясь цикла опроса.
+ * Требует Authorization: Bearer <токен>; из панели то же самое делает
+ * POST /api/admin/reload, но по сессии.
+ */
+export async function handleSitesReload(req: Request): Promise<Response> {
+    if (!config.sitesReloadToken) return json({ error: 'disabled' }, 404)
+    if (!reloadTokenOk(req)) return json({ error: 'unauthorized' }, 401)
+    return requestUpdaterReload()
 }

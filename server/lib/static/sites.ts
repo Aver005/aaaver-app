@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises'
+import { readdir, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { config } from '../../config'
 import { cacheControl, looksLikeFile, safeJoin, tryFile } from './files'
@@ -10,8 +10,12 @@ import type { StaticHandler } from './types'
  * Папки монтируются с хоста — обновление демки не требует пересборки.
  */
 
-/** Имена, занятые самим портфолио, — такой слаг демке не достанется */
-export const RESERVED = new Set(['api', 'assets', 'projects'])
+/**
+ * Имена, занятые самим портфолио, — такой слаг демке не достанется.
+ * `admin` здесь потому, что обработчик демок пробуется ПЕРВЫМ: без брони
+ * папка `sites/admin/` перекрыла бы панель управления собой.
+ */
+export const RESERVED = new Set(['api', 'assets', 'projects', 'admin'])
 
 export const SLUG_RE = /^[a-z0-9-]+$/
 
@@ -64,4 +68,67 @@ export async function listSites(): Promise<string[]> {
         if (await siteRoot(name)) slugs.push(name)
     }
     return slugs.sort()
+}
+
+/** Метка, которую апдейтер кладёт внутрь развёрнутой демки */
+interface ReleaseMarker {
+    version?: unknown
+    tag?: unknown
+    deployedAt?: unknown
+}
+
+export interface SiteInfo {
+    slug: string
+    /** null — демку залили мимо апдейтера (руками), метки внутри нет */
+    version: string | null
+    tag: string | null
+    deployedAt: string | null
+    bytes: number
+    files: number
+}
+
+async function dirStats(root: string): Promise<{ bytes: number; files: number }> {
+    let bytes = 0
+    let files = 0
+    // Демка — это собранный фронтенд: десятки файлов, не десятки тысяч,
+    // поэтому обход целиком дешевле, чем хранить размер отдельной меткой.
+    for (const name of await readdir(root, { recursive: true })) {
+        try {
+            const info = await stat(join(root, name))
+            if (!info.isFile()) continue
+            files++
+            bytes += info.size
+        } catch {
+            // файл исчез между readdir и stat — апдейтер как раз подменял папку
+        }
+    }
+    return { bytes, files }
+}
+
+/** Что реально лежит на диске — для админки. Истина здесь именно диск. */
+export async function describeSites(): Promise<SiteInfo[]> {
+    const infos: SiteInfo[] = []
+
+    for (const slug of await listSites()) {
+        const root = join(config.sitesDir, slug)
+
+        let marker: ReleaseMarker = {}
+        try {
+            marker = (await Bun.file(join(root, '.release.json')).json()) as ReleaseMarker
+        } catch {
+            // метки нет или она битая — демка залита руками, это законно
+        }
+
+        const { bytes, files } = await dirStats(root)
+        infos.push({
+            slug,
+            version: typeof marker.version === 'string' ? marker.version : null,
+            tag: typeof marker.tag === 'string' ? marker.tag : null,
+            deployedAt: typeof marker.deployedAt === 'string' ? marker.deployedAt : null,
+            bytes,
+            files,
+        })
+    }
+
+    return infos
 }

@@ -1,4 +1,10 @@
 services:
+  # `depends_on: postgres` здесь НЕТ, и это не забывчивость. Postgres описан
+  # в родительском /root/compose.yml, а этот файл подключается к нему через
+  # include — ссылка на чужой сервис ломает compose («depends on undefined
+  # service»). Взамен сервер устроен так, чтобы подниматься при лежащей базе:
+  # статика отдаётся всегда, всё, что ходит в базу, отвечает 503 и лечится
+  # само, когда Postgres возвращается (см. server/db/client.ts).
   app:
     build: .
     container_name: aaaver-app
@@ -9,14 +15,10 @@ services:
     environment:
       # внутри контейнера всегда так, что бы ни лежало в .env
       PORT: 3000
-      DATABASE_PATH: /data/aaaver.db
       SITES_DIR: /sites
       SITES_UPDATER_URL: http://sites-updater:8484
     volumes:
-      # БД живёт на хосте: ./data/aaaver.db можно копировать, бэкапить
-      # и подменять без пересборки контейнера
-      - ./data:/data
-      # демки: ./sites/<slug>/ на хосте = https://.../<slug>/, тоже без пересборки
+      # демки: ./sites/<slug>/ на хосте = https://.../<slug>/, без пересборки
       - ./sites:/sites:ro
     healthcheck:
       test:
@@ -29,9 +31,12 @@ services:
       retries: 3
       start_period: 10s
 
-  # Автодеплой демок: опрашивает релизы по sites.config.json и обновляет
-  # sites/. Единственный, у кого этот каталог смонтирован на запись, —
-  # основной сервер видит его read-only.
+  # Автодеплой демок: читает реестр из базы (таблица `sites`, её пишет
+  # панель), опрашивает релизы и обновляет sites/. Единственный, у кого этот
+  # каталог смонтирован на запись, — основной сервер видит его read-only.
+  #
+  # `depends_on` нет по той же причине, что и у app: Postgres описан в
+  # родительском compose. Недоступный реестр — пропущенный цикл, не падение.
   sites-updater:
     build: .
     container_name: aaaver-sites-updater
@@ -42,4 +47,3 @@ services:
       SITES_DIR: /sites
     volumes:
       - ./sites:/sites
-      - ./sites.config.json:/app/sites.config.json:ro

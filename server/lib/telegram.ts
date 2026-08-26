@@ -14,7 +14,7 @@ function escapeHtml(text: string): string {
 export async function resolveChatId(): Promise<string | null> {
     if (config.chatId) return config.chatId
 
-    const saved = getSetting('telegram_chat_id')
+    const saved = await getSetting('telegram_chat_id')
     if (saved) return saved
 
     if (!config.botToken) return null
@@ -32,7 +32,7 @@ export async function resolveChatId(): Promise<string | null> {
             .find((c) => c && c.type === 'private')
         if (!privateChat) return null
         const id = String(privateChat.id)
-        setSetting('telegram_chat_id', id)
+        await setSetting('telegram_chat_id', id)
         console.log(`[telegram] нашёл chat_id ${id} через getUpdates и сохранил в БД`)
         return id
     } catch {
