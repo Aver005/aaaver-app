@@ -111,6 +111,9 @@ slide-to-send вместо кнопки и honeypot-поле. Плюс лими�
 - [docs/new-site.md](docs/new-site.md) — чеклист: добавить демку на `/<slug>/`
 - [docs/admin.md](docs/admin.md) — панель управления и вход через SSO
 - [docs/content.md](docs/content.md) — где менять тексты и проекты
+- [docs/redesign.md](docs/redesign.md) — журнал редизайна: находки, план, решения
+- [docs/next-steps.md](docs/next-steps.md) — что осталось доделать и как продолжать
+- [CHANGELOG.md](CHANGELOG.md) — история изменений
 
 ## Переменные окружения
 

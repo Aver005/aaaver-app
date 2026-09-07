@@ -16,7 +16,7 @@ export function ConsentDialog({ open, onClose }: ConsentDialogProps) {
             open={open}
             onClose={onClose}
             labelledBy="consent-title"
-            className="max-h-[min(90vh,780px)] w-full max-w-3xl overflow-hidden rounded-md border hairline bg-ink-raise shadow-[0_30px_120px_rgba(0,0,0,0.45)]"
+            className="max-h-[min(90vh,780px)] w-full max-w-3xl overflow-hidden rounded-md border hairline bg-ink-raise shadow-overlay"
         >
             <div className="flex items-start justify-between gap-4 border-b hairline px-5 py-5 sm:px-7">
                 <div className="space-y-2">

@@ -13,3 +13,8 @@
     --color-ember-bright: #ff8a50;
     --color-ember-deep: #c23c0a;
 }
+
+/* Тень модалок — токеном, чтобы светлый вариант мог задать свою */
+@theme {
+    --shadow-overlay: 0 40px 120px rgba(0, 0, 0, 0.6);
+}
