@@ -3,6 +3,7 @@ import { ContactForm } from '@/features/contact-form'
 import { Section, Reveal } from '@/shared/ui'
 import { useI18n } from '@/shared/i18n'
 import { SITE } from '@/shared/config/site'
+import { sectionIndex } from '@/shared/config/sections'
 
 const CHANNELS = [
     { id: 'telegram', icon: Send, label: SITE.telegramHandle, href: SITE.telegram },
@@ -14,7 +15,7 @@ export function Contact() {
     const { t } = useI18n()
 
     return (
-        <Section id="contact" index="06" title={t.contact.title} subtitle={t.contact.subtitle}>
+        <Section id="contact" index={sectionIndex('contact')} title={t.contact.title} subtitle={t.contact.subtitle}>
             <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-10">
                 <div className="lg:col-span-5">
                     <Reveal>

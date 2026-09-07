@@ -1,0 +1,21 @@
+# Локальный Postgres для разработки. В проде базы здесь нет — она в общем
+# стеке VDS (см. docker-compose.yml и docs/deploy.md).
+#
+#   docker compose -f docker-compose.dev.yml up -d
+#   DATABASE_URL=postgres://aaaver:aaaver@127.0.0.1:5433/aaaverdb  (в .env.local)
+services:
+  pg-dev:
+    image: postgres:17-alpine
+    container_name: aaaver-pg-dev
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:5433:5432'
+    environment:
+      POSTGRES_USER: aaaver
+      POSTGRES_PASSWORD: aaaver
+      POSTGRES_DB: aaaverdb
+    volumes:
+      - aaaver-pg-dev:/var/lib/postgresql/data
+
+volumes:
+  aaaver-pg-dev:

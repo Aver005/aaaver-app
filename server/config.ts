@@ -95,6 +95,8 @@ export const config = {
     adminSessionTtlMs: 12 * 60 * 60 * 1000,
 
     githubUser: 'Aver005',
+    /** Необязательный токен: поднимает лимит GitHub API и открывает приватные репы апдейтеру */
+    githubToken: process.env.GITHUB_TOKEN ?? '',
     githubCacheTtlMs: 6 * 60 * 60 * 1000,
 
     isProd: process.env.NODE_ENV === 'production',

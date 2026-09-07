@@ -1,31 +1,44 @@
 import { ArrowUpRight } from 'lucide-react'
-import { RepoCard } from '@/entities/repo'
+import { ALL_PROJECTS } from '@/entities/project'
+import { useRepos } from '@/entities/repo'
 import { Section, Reveal, ButtonLink } from '@/shared/ui'
 import { useI18n } from '@/shared/i18n'
 import { SITE } from '@/shared/config/site'
-import { useRepos } from '../model/useRepos'
+import { sectionIndex } from '@/shared/config/sections'
+import { RepoRow } from './RepoRow'
+
+const LIMIT = 8
+
+/** Репозиторий известного проекта — по ссылке из его данных, без учёта регистра */
+function knownProject(repoUrl: string) {
+    const url = repoUrl.toLowerCase()
+    return ALL_PROJECTS.find((project) => project.links.repo?.toLowerCase() === url)
+}
 
 export function OpenSource() {
-    const { t } = useI18n()
-    const repos = useRepos(6)
+    const { t, lx } = useI18n()
+    const { repos, live, snapshotDate } = useRepos()
+    const subtitle = live ? t.openSource.subtitle : `${t.openSource.snapshot} ${snapshotDate}`
 
     return (
-        <Section id="opensource" index="04" title={t.openSource.title} subtitle={t.openSource.subtitle}>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {repos.map((repo, i) => (
-                    <Reveal key={repo.name} delay={(i % 3) * 0.08} className="h-full">
-                        <RepoCard repo={repo} />
-                    </Reveal>
-                ))}
-            </div>
-            <Reveal delay={0.2}>
-                <div className="mt-10 flex justify-center">
-                    <ButtonLink
-                        href={SITE.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="ghost"
-                    >
+        <Section id="opensource" index={sectionIndex('opensource')} title={t.openSource.title} subtitle={subtitle}>
+            <Reveal>
+                <ul className="border-t hairline">
+                    {repos.slice(0, LIMIT).map((repo) => {
+                        const project = knownProject(repo.url)
+                        return (
+                            <RepoRow
+                                key={repo.name}
+                                repo={repo}
+                                fallbackDescription={project ? lx(project.summary) : undefined}
+                            />
+                        )
+                    })}
+                </ul>
+            </Reveal>
+            <Reveal delay={0.1}>
+                <div className="mt-8 flex justify-end">
+                    <ButtonLink href={SITE.github} target="_blank" rel="noopener noreferrer" variant="ghost">
                         {t.openSource.viewAll}
                         <ArrowUpRight size={14} />
                     </ButtonLink>

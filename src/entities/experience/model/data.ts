@@ -25,6 +25,18 @@ export const JOBS: Job[] = [
         },
     },
     {
+        id: 'maushi',
+        from: '2025',
+        to: null,
+        company: { ru: 'Maushi', en: 'Maushi' },
+        companyUrl: 'https://maushi.ru',
+        role: { ru: 'Фулстек-разработчик, фриланс', en: 'Full-stack developer, freelance' },
+        description: {
+            ru: 'Сайт с бронированием, CRM, платежи и умные замки, киоск-софт для сети студий звукозаписи — от схемы API до Windows-службы.',
+            en: 'A booking site, a CRM, payments and smart locks, kiosk software for a chain of recording studios — from the API schema to a Windows service.',
+        },
+    },
+    {
         id: 'foxford',
         from: '2023',
         to: '2024',

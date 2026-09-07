@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import { I18nProvider } from '@/shared/i18n'
 import { Navbar } from '@/widgets/navbar'
 import { Footer } from '@/widgets/footer'
+import { StatusBar } from '@/widgets/status-bar'
 import { HomePage } from '@/pages/home'
 
 /**
@@ -29,10 +30,11 @@ function Portfolio() {
     return (
         <I18nProvider>
             <MotionConfig reducedMotion="user">
-                <div className="grain relative min-h-svh">
+                <div className="grain relative min-h-svh lg:pb-7">
                     <Navbar />
                     <HomePage />
                     <Footer />
+                    <StatusBar />
                 </div>
             </MotionConfig>
         </I18nProvider>

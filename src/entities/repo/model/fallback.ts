@@ -1,77 +1,120 @@
 import type { RepoInfo } from '@/shared/api'
 
+/** Дата снимка — показывается вместо «живого» списка, когда GitHub недоступен */
+export const REPOS_SNAPSHOT_DATE = '2026-09-06'
+
 /**
- * Снимок данных GitHub на момент сборки. Используется, пока живой
- * ответ /api/github/repos едет по сети, и как запасной вариант,
- * если GitHub недоступен.
+ * Снимок данных GitHub на момент сборки. Показывается, пока живой ответ
+ * /api/github/repos едет по сети, и если GitHub недоступен.
+ * Обновляется скриптом scripts/repos-snapshot.ts, руками не править.
  */
 export const REPOS_FALLBACK: RepoInfo[] = [
     {
-        name: 'ins-package-manager',
-        url: 'https://github.com/Aver005/ins-package-manager',
+        name: 'PoopRusteek',
+        url: 'https://github.com/Aver005/PoopRusteek',
+        description: 'Терминальный AI-агент для кодинга на Rust поверх веб-API DeepSeek — событийный цикл на tokio, где каждая беседа владеет своим изолированным провайдером, что даёт параллельные чаты, сайдчаты и саб-агентов без потери стрима.',
+        language: 'Rust',
+        stars: 1,
+        topics: ['agent', 'claude', 'deepseek', 'llm', 'rust'],
+        pushedAt: '2026-09-06T10:58:49Z',
+    },
+    {
+        name: 'dot-memories-ext',
+        url: 'https://github.com/Aver005/dot-memories-ext',
         description: null,
-        language: 'Rust',
+        language: 'TypeScript',
         stars: 0,
         topics: [],
-        pushedAt: '2026-06-03T10:55:25Z',
+        pushedAt: '2026-09-05T22:49:08Z',
     },
     {
-        name: 'pooprusteek',
-        url: 'https://github.com/Aver005/pooprusteek',
-        description:
-            'Быстрый TUI-кодинг-агент на Rust: Ratatui, Catppuccin, потоковый вывод, MCP и ACP.',
+        name: 'kiviuly-app',
+        url: 'https://github.com/Aver005/kiviuly-app',
+        description: null,
+        language: 'TypeScript',
+        stars: 0,
+        topics: [],
+        pushedAt: '2026-08-26T15:52:12Z',
+    },
+    {
+        name: 'flowest',
+        url: 'https://github.com/Aver005/flowest',
+        description: null,
+        language: 'TypeScript',
+        stars: 0,
+        topics: [],
+        pushedAt: '2026-07-26T21:46:27Z',
+    },
+    {
+        name: 'skyblockwars-reborn',
+        url: 'https://github.com/Aver005/skyblockwars-reborn',
+        description: null,
+        language: 'Java',
+        stars: 0,
+        topics: ['gradle', 'java', 'minecraft', 'minigame', 'plugin', 'skyblock'],
+        pushedAt: '2026-07-24T15:50:26Z',
+    },
+    {
+        name: 'escape-reborn',
+        url: 'https://github.com/Aver005/escape-reborn',
+        description: null,
+        language: 'Java',
+        stars: 0,
+        topics: ['gradle', 'java', 'minecraft', 'minigame', 'minigame-plugin', 'plugin'],
+        pushedAt: '2026-07-24T15:50:24Z',
+    },
+    {
+        name: 'skywars-reborn',
+        url: 'https://github.com/Aver005/skywars-reborn',
+        description: null,
+        language: 'Java',
+        stars: 0,
+        topics: ['claude', 'java', 'minecraft', 'minigame', 'plugin', 'skywars'],
+        pushedAt: '2026-07-24T15:49:05Z',
+    },
+    {
+        name: 'kiviuly-minigame-core',
+        url: 'https://github.com/Aver005/kiviuly-minigame-core',
+        description: null,
+        language: 'Java',
+        stars: 0,
+        topics: [],
+        pushedAt: '2026-07-24T12:26:51Z',
+    },
+    {
+        name: 'craws-landing',
+        url: 'https://github.com/Aver005/craws-landing',
+        description: null,
+        language: 'TypeScript',
+        stars: 0,
+        topics: [],
+        pushedAt: '2026-07-08T23:40:56Z',
+    },
+    {
+        name: 'craws',
+        url: 'https://github.com/Aver005/craws',
+        description: '🦀 Craws — a BLAZING-fast, automation-first image editor built for developers. Powered by a tiled, content-hash-cached Rust engine that works in linear-light f32 color, it ships as a headless CLI and an MCP server so AI agents can annotate, compose, and transform images directly. 🖼️⚡ Pixels never travel as JSON — every claim is backed by benchmark',
         language: 'Rust',
         stars: 0,
-        topics: ['agent', 'ai', 'rust', 'cli', 'tui'],
-        pushedAt: '2026-06-28T00:00:00Z',
+        topics: ['blazing', 'cli', 'editor', 'gimp', 'image', 'image-editing', 'image-processing', 'mcp', 'model-context-protocol', 'open-source', 'photoshop', 'rust'],
+        pushedAt: '2026-07-08T02:37:35Z',
     },
     {
-        name: 'poopseek',
-        url: 'https://github.com/Aver005/poopseek',
-        description:
-            'Инструментный ИИ-агент с доступом к файловой системе и shell-командам, написанный на TypeScript (Bun).',
-        language: 'TypeScript',
-        stars: 1,
-        topics: ['agent', 'ai', 'bun', 'cli'],
-        pushedAt: '2026-05-22T16:35:33Z',
-    },
-    {
-        name: 'Tanstack-Start-Template',
-        url: 'https://github.com/Aver005/Tanstack-Start-Template',
-        description: 'Tanstack Start Template',
+        name: 'poopseek-landing',
+        url: 'https://github.com/Aver005/poopseek-landing',
+        description: null,
         language: 'TypeScript',
         stars: 0,
-        topics: ['react', 'tanstack', 'tailwind'],
-        pushedAt: '2026-05-19T23:22:38Z',
-    },
-    {
-        name: 'deepaude',
-        url: 'https://github.com/Aver005/deepaude',
-        description:
-            'Прокси-сервер, превращающий DeepSeek Chat в полностью совместимый с Anthropic API endpoint.',
-        language: 'TypeScript',
-        stars: 0,
-        topics: ['ai', 'api', 'bridge'],
-        pushedAt: '2026-04-24T00:00:00Z',
-    },
-    {
-        name: 'agent-skills',
-        url: 'https://github.com/Aver005/agent-skills',
-        description:
-            'Набор скиллов для AI-агентов: 40+ экспертных гайдов по Frontend, Backend и инфраструктуре.',
-        language: 'TypeScript',
-        stars: 1,
         topics: [],
-        pushedAt: '2026-04-21T00:00:00Z',
+        pushedAt: '2026-07-08T00:17:46Z',
     },
     {
-        name: 'tanstack-template',
-        url: 'https://github.com/Aver005/tanstack-template',
-        description:
-            'Production-ready фуллстек-шаблон на TanStack Start, React 19, Bun, Tailwind v4 и Drizzle ORM.',
+        name: 'pooprusteek-landing',
+        url: 'https://github.com/Aver005/pooprusteek-landing',
+        description: null,
         language: 'TypeScript',
-        stars: 1,
-        topics: ['bun', 'docker', 'fsd', 'tanstack'],
-        pushedAt: '2026-03-14T00:00:00Z',
+        stars: 0,
+        topics: [],
+        pushedAt: '2026-07-05T02:41:48Z',
     },
 ]

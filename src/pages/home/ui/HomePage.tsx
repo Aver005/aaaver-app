@@ -1,25 +1,21 @@
 import { Hero } from '@/widgets/hero'
-import { StackMarquee } from '@/widgets/stack'
-import { About } from '@/widgets/about'
-import { Experience } from '@/widgets/experience'
 import { Projects } from '@/widgets/projects'
+import { Experience } from '@/widgets/experience'
 import { OpenSource } from '@/widgets/open-source'
-import { Stack } from '@/widgets/stack'
 import { Contact } from '@/widgets/contact'
+import { DemoWindow } from '@/features/demo-window'
 
 export function HomePage() {
     return (
         <main>
             <Hero />
-            <StackMarquee />
-            <div className="flex flex-col gap-28 pt-28 sm:gap-44 sm:pt-44">
-                <About />
-                <Experience />
+            <div className="flex flex-col gap-28 pt-28 sm:gap-40 sm:pt-40">
                 <Projects />
+                <Experience />
                 <OpenSource />
-                <Stack />
                 <Contact />
             </div>
+            <DemoWindow />
         </main>
     )
 }

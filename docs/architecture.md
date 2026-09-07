@@ -16,30 +16,52 @@ vite dev-сервер на :5173 проксирует `/api` на bun-серве
 
 ```
 app/        точка входа, роутер, провайдеры, глобальные стили
-pages/      home — композиция виджетов
+            (styles/theme.css — палитра, index.css — всё остальное)
+pages/      home — композиция виджетов + хост окна демки
             admin — панель управления, отдельным ленивым чанком
-widgets/    navbar, hero, about, experience, projects, open-source,
-            stack, contact, footer
-features/   contact-form (форма + slide-to-send + pow),
-            locale-switch (RU/EN)
-entities/   project, experience, skill, repo — типы, данные, карточки
-shared/     ui-кит, i18n, api-клиент, pow-солвер, конфиг
+widgets/    navbar, hero, projects, experience, open-source, contact,
+            footer, status-bar
+features/   contact-form (форма + slide-to-send + pow + согласие),
+            demo-window (демка внутри сайта), locale-switch (RU/EN)
+entities/   project, experience, skill, repo — типы, данные, хуки данных
+shared/     ui-кит (Section, Overlay, Button…), i18n, api-клиент,
+            pow-солвер, конфиг (site, sections), хуки, утилиты
 ```
 
 Правило простое: виджет может импортировать фичи/сущности/shared,
 фича — сущности/shared, сущность — только shared. Внутри слайса наружу
-торчит только `index.ts`.
+торчит только `index.ts`. Карточки проектов живут в `widgets/projects/ui`,
+а не в сущности: у них один потребитель, и им нужна фича окна демки.
+
+Разделы главной перечислены один раз — в `shared/config/sections.ts`
+(порядок, якоря, номера); навигация, подсветка активного раздела и
+заголовки секций читают оттуда.
+
+### Окно демки
+
+`features/demo-window`: живые демки из `sites/` открываются внутри сайта
+в iframe. Стор модульный (`useSyncExternalStore`, без провайдера) —
+открыть окно может любой виджет, хост один на странице. `DemoLink` —
+обычная ссылка на `/<slug>/`: без JS и на тач-устройствах открывает
+вкладку, с курсором на широком экране — окно. Открытие кладёт запись в
+историю, «назад» закрывает окно. `sandbox` без навигации родителя.
+Все модалки сайта (согласие, демка) — на `shared/ui/Overlay`: портал в
+body, `inert` на приложении, блокировка прокрутки, возврат фокуса.
 
 ### Контент
 
 Весь контент — статика в коде, БД для него не нужна:
 
 - тексты интерфейса: `shared/i18n/dict.ts` (словарь RU/EN);
-- проекты, опыт, стек: `entities/*/model/data.ts` с двуязычными полями.
+- проекты, опыт, стек: `entities/*/model/data.ts` с двуязычными полями;
+  подписи видов и статусов проекта — `entities/project/model/labels.ts`.
 
-Исключение — секция Open Source: она тянет живые данные с GitHub через
-серверный кэш (`/api/github/repos`), а на время загрузки/при ошибке
-показывает снимок из `entities/repo/model/fallback.ts`.
+Исключение — живые данные GitHub (`/api/github/repos`, серверный кэш):
+их читают лента Open Source, строка «сейчас» в hero и статус-бар через
+один общий `useRepos` (запрос на страницу один). На время загрузки и при
+ошибке показывается снимок из `entities/repo/model/fallback.ts`, который
+обновляет `bun scripts/repos-snapshot.ts` тем же фильтром, что у сервера
+(`server/lib/github.ts`).
 
 ### Локализация
 

@@ -1,27 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { Menu, X } from 'lucide-react'
 import { LocaleSwitch } from '@/features/locale-switch'
 import { useI18n } from '@/shared/i18n'
+import { SECTIONS, SECTION_IDS } from '@/shared/config/sections'
 import { cn } from '@/shared/lib/cn'
-
-const SECTIONS = ['about', 'experience', 'projects', 'opensource', 'stack', 'contact'] as const
+import { useActiveSection, useScrollLock } from '@/shared/lib/hooks'
 
 export function Navbar() {
     const { t } = useI18n()
     const [scrolled, setScrolled] = useState(false)
     const [open, setOpen] = useState(false)
+    const active = useActiveSection(SECTION_IDS)
     const { scrollY } = useScroll()
 
     useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 32))
-
-    // блокируем прокрутку под мобильным меню
-    useEffect(() => {
-        document.body.style.overflow = open ? 'hidden' : ''
-        return () => {
-            document.body.style.overflow = ''
-        }
-    }, [open])
+    useScrollLock(open)
 
     return (
         <>
@@ -41,18 +35,30 @@ export function Navbar() {
                     </a>
 
                     <div className="hidden items-center gap-8 md:flex">
-                        {SECTIONS.map((id, i) => (
-                            <a
-                                key={id}
-                                href={`#${id}`}
-                                className="group font-mono text-xs uppercase tracking-[0.18em] text-paper-dim transition-colors hover:text-paper"
-                            >
-                                <span className="mr-1.5 text-ember/60 transition-colors group-hover:text-ember">
-                                    0{i + 1}
-                                </span>
-                                {t.nav[id]}
-                            </a>
-                        ))}
+                        {SECTIONS.map(({ id, index }) => {
+                            const current = active === id
+                            return (
+                                <a
+                                    key={id}
+                                    href={`#${id}`}
+                                    aria-current={current ? 'location' : undefined}
+                                    className={cn(
+                                        'group font-mono text-xs uppercase tracking-[0.18em] transition-colors hover:text-paper',
+                                        current ? 'text-paper' : 'text-paper-dim',
+                                    )}
+                                >
+                                    <span
+                                        className={cn(
+                                            'mr-1.5 transition-colors group-hover:text-ember',
+                                            current ? 'text-ember' : 'text-ember/60',
+                                        )}
+                                    >
+                                        {index}
+                                    </span>
+                                    {t.nav[id]}
+                                </a>
+                            )
+                        })}
                         <LocaleSwitch />
                     </div>
 
@@ -81,7 +87,7 @@ export function Navbar() {
                         transition={{ duration: 0.25 }}
                         className="fixed inset-0 z-40 flex flex-col justify-center bg-ink/95 px-8 backdrop-blur-lg md:hidden"
                     >
-                        {SECTIONS.map((id, i) => (
+                        {SECTIONS.map(({ id, index }, i) => (
                             <motion.a
                                 key={id}
                                 href={`#${id}`}
@@ -91,7 +97,7 @@ export function Navbar() {
                                 transition={{ delay: 0.06 * i + 0.1, duration: 0.4 }}
                                 className="border-b hairline py-5 font-display text-2xl font-semibold uppercase tracking-tight text-paper active:text-ember"
                             >
-                                <span className="mr-4 font-mono text-sm text-ember">0{i + 1}</span>
+                                <span className="mr-4 font-mono text-sm text-ember">{index}</span>
                                 {t.nav[id]}
                             </motion.a>
                         ))}

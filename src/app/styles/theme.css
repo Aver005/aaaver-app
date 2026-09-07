@@ -1,0 +1,15 @@
+/* Палитра варианта. В базе — «чернила и уголь»: тёплая тёмная гамма и один акцент. */
+@theme {
+    --color-ink: #0c0a09;
+    --color-ink-raise: #131009;
+    --color-ink-soft: #1a1610;
+    --color-paper: #ece7df;
+    --color-paper-dim: #a89f92;
+    --color-paper-faint: #635c50;
+    --color-line: rgba(236, 231, 223, 0.09);
+    --color-line-strong: rgba(236, 231, 223, 0.18);
+
+    --color-ember: #ff5d1f;
+    --color-ember-bright: #ff8a50;
+    --color-ember-deep: #c23c0a;
+}

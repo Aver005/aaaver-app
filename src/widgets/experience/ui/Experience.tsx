@@ -2,17 +2,23 @@ import { ArrowUpRight } from 'lucide-react'
 import { JOBS } from '@/entities/experience'
 import { Section, Reveal } from '@/shared/ui'
 import { useI18n } from '@/shared/i18n'
+import { sectionIndex } from '@/shared/config/sections'
 
 export function Experience() {
     const { t, lx } = useI18n()
 
     return (
-        <Section id="experience" index="02" title={t.experience.title}>
-            <div>
+        <Section
+            id="experience"
+            index={sectionIndex('experience')}
+            title={t.experience.title}
+            subtitle={t.experience.subtitle}
+        >
+            <div className="border-t hairline">
                 {JOBS.map((job, i) => (
-                    <Reveal key={job.id} delay={i * 0.07}>
-                        <article className="group grid grid-cols-1 gap-2 border-b hairline py-7 transition-colors duration-300 hover:bg-ink-raise sm:grid-cols-12 sm:gap-6 sm:px-4 sm:-mx-4">
-                            <div className="font-mono text-xs tracking-[0.14em] text-paper-faint sm:col-span-2 sm:pt-1.5">
+                    <Reveal key={job.id} delay={i * 0.05}>
+                        <article className="grid grid-cols-1 gap-2 border-b hairline py-6 sm:grid-cols-12 sm:gap-6">
+                            <div className="font-mono text-xs tracking-[0.14em] text-paper-faint sm:col-span-2 sm:pt-1">
                                 {job.from} — {job.to ?? t.experience.present}
                             </div>
                             <h3 className="font-display text-lg font-semibold text-paper sm:col-span-3">
