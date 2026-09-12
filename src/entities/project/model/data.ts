@@ -13,6 +13,28 @@ export const PROJECTS: Project[] = [
         tags: ['AI', 'Transcription', 'Audio'],
     },
     {
+        id: 'mpga',
+        title: 'MPGA',
+        url: 'https://mpga.kiviuly.ru',
+        image: '/projects/mpga.webp',
+        description: {
+            ru: 'Превращает HTML-презентацию от нейросети в настоящий .pptx: каждый заголовок, абзац и фигура становятся редактируемым объектом, а не картинкой. Работает в браузере и без интернета.',
+            en: 'Turns an AI-generated HTML deck into a real .pptx: every heading, paragraph and shape becomes an editable object instead of a picture. Runs in the browser, works offline.',
+        },
+        tags: ['AI', 'PowerPoint', 'Offline'],
+    },
+    {
+        id: 'craws',
+        title: 'Craws',
+        url: 'https://github.com/Aver005/craws',
+        image: '/projects/craws.webp',
+        description: {
+            ru: 'Редактор изображений на Rust для тех, кто автоматизирует: тайловый конвейер в линейном свете, кеш по хешу содержимого, одинаковый доступ из интерфейса, консоли, CI и агента по MCP.',
+            en: 'An automation-first image editor in Rust: a tiled linear-light pipeline with a content-hash cache, driven equally from the GUI, a headless CLI, CI, or an AI agent over MCP.',
+        },
+        tags: ['Rust', 'Image', 'CLI'],
+    },
+    {
         id: 'warcube',
         title: 'WarCube',
         url: 'https://github.com/Aver005/warcube-web',
