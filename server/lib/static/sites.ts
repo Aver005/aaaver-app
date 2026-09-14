@@ -49,8 +49,21 @@ export const serveSite: StaticHandler = async ({ pathname, search }) => {
     const file = await tryFile(safeJoin(root, path), cacheControl(path))
     if (file) return file
 
-    // у демки может быть свой клиентский роутинг — фолбэк на её index.html
     if (looksLikeFile(path)) return null
+
+    // пререндеренная страница демки: /slug/en → /slug/en/, как у корня
+    if (await Bun.file(safeJoin(root, `${rest}/index.html`)).exists()) {
+        return new Response(null, {
+            status: 308,
+            headers: { Location: `/${slug}${rest}/${search}` },
+        })
+    }
+
+    // Демка со своим 404.html — пререндеренный сайт: неизвестный путь честно
+    // отвечает 404. Без него — SPA, у которого может быть клиентский роутинг,
+    // и фолбэк на index.html.
+    const notFound = await tryFile(join(root, '404.html'), 'no-cache')
+    if (notFound) return new Response(notFound.body, { status: 404, headers: notFound.headers })
     return tryFile(join(root, 'index.html'), 'no-cache')
 }
 

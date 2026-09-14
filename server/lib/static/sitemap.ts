@@ -19,6 +19,23 @@ async function deployedAt(slug: string): Promise<string | null> {
 }
 
 /**
+ * Пререндеренная демка кладёт свой sitemap.xml со всеми страницами и hreflang —
+ * берём из него записи, чьи адреса лежат под `/<slug>/` этого домена. Копия
+ * сайта с другим каноничным хостом (pooprusteek) сюда не пройдёт.
+ */
+async function ownEntries(slug: string, origin: string): Promise<string[]> {
+    try {
+        const xml = await Bun.file(join(config.sitesDir, slug, 'sitemap.xml')).text()
+        const prefix = `${origin}/${slug}/`
+        return [...xml.matchAll(/  <url>[\s\S]*?<\/url>/g)]
+            .map((m) => m[0])
+            .filter((entry) => entry.match(/<loc>([^<]+)<\/loc>/)?.[1]?.startsWith(prefix))
+    } catch {
+        return []
+    }
+}
+
+/**
  * Демка, чья главная объявляет каноничным другой адрес (например, копия
  * лендинга с GitHub Pages), в sitemap не идёт: там место только каноничным URL.
  */
@@ -53,6 +70,11 @@ export const serveSitemap: StaticHandler = async ({ pathname }) => {
 
     const entries: string[] = []
     for (const slug of await listSites()) {
+        const own = await ownEntries(slug, origin)
+        if (own.length) {
+            entries.push(...own)
+            continue
+        }
         if (!(await canonicalHere(slug, `${origin}/${slug}/`))) continue
         const lastmod = await deployedAt(slug)
         entries.push(
