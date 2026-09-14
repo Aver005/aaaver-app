@@ -39,7 +39,9 @@ git pull && docker compose up --build -d
 в master: typecheck → ssh на VDS → `git pull && docker compose up
 --build -d` → ждёт, пока `/api/health` не ответит (иначе валит workflow
 и печатает логи контейнера). Одновременные деплои не накладываются —
-второй ждёт первого.
+второй ждёт первого. После успешного деплоя `scripts/indexnow.ts`
+отправляет адреса из живого `sitemap.xml` в IndexNow (Яндекс, Bing);
+ключ — `public/76b5e4e8990f79f9f335cf3d29272b85.txt`, его не трогать.
 
 Разовая настройка — завести отдельный ключ для деплоя и три секрета:
 

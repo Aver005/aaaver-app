@@ -19,6 +19,21 @@ async function deployedAt(slug: string): Promise<string | null> {
 }
 
 /**
+ * Демка, чья главная объявляет каноничным другой адрес (например, копия
+ * лендинга с GitHub Pages), в sitemap не идёт: там место только каноничным URL.
+ */
+async function canonicalHere(slug: string, url: string): Promise<boolean> {
+    try {
+        const html = await Bun.file(join(config.sitesDir, slug, 'index.html')).text()
+        const tag = html.match(/<link[^>]+rel=["']canonical["'][^>]*>/i)?.[0]
+        const href = tag?.match(/href=["']([^"']+)["']/i)?.[1]
+        return !href || href === url
+    } catch {
+        return false
+    }
+}
+
+/**
  * sitemap.xml = страницы портфолио из сборки + корни смонтированных демок.
  *
  * Демки появляются без пересборки, поэтому их список дописывается на лету.
@@ -38,6 +53,7 @@ export const serveSitemap: StaticHandler = async ({ pathname }) => {
 
     const entries: string[] = []
     for (const slug of await listSites()) {
+        if (!(await canonicalHere(slug, `${origin}/${slug}/`))) continue
         const lastmod = await deployedAt(slug)
         entries.push(
             [

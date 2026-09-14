@@ -71,3 +71,13 @@ jobs:
           EOF
         env:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+
+  # Яндекс и Bing узнают об обновлении за часы, а не ждут своего обхода.
+  # Упавшая отправка деплой не откатывает: сайт уже выкачен.
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun scripts/indexnow.ts
