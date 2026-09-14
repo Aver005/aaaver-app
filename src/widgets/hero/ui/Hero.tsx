@@ -66,7 +66,7 @@ export function Hero() {
                     variants={item}
                     className="font-display text-[clamp(2.6rem,9.5vw,8rem)] leading-[1.06] font-bold uppercase tracking-tight"
                 >
-                    <span className="block text-paper">{t.hero.firstName}</span>
+                    <span className="block text-paper">{t.hero.firstName}</span>{' '}
                     <span className="block text-outline">{t.hero.lastName}</span>
                 </motion.h1>
 

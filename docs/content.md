@@ -56,5 +56,7 @@ TypeScript не даст забыть перевод.
 
 ## SEO-мелочи
 
-`index.html` — title, description, OG-теги, JSON-LD. Фавиконки в
-`public/`.
+Title и description для каждого языка — `src/shared/config/seo.ts`.
+Canonical, hreflang, OG-теги, JSON-LD, `sitemap.xml` и `llms.txt`
+собирает `scripts/prerender.ts` из тех же данных, что видны на странице,
+— руками их не пишем. `robots.txt` и фавиконки лежат в `public/`.

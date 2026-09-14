@@ -1,5 +1,6 @@
 import { serveApp } from './app'
 import { serveSite } from './sites'
+import { serveSitemap } from './sitemap'
 import type { StaticContext, StaticHandler } from './types'
 
 /**
@@ -7,7 +8,7 @@ import type { StaticContext, StaticHandler } from './types'
  * побеждает. Новая статичная фича = новый обработчик в этом списке.
  * Портфолио с его SPA-фолбэком — всегда последний.
  */
-const handlers: StaticHandler[] = [serveSite, serveApp]
+const handlers: StaticHandler[] = [serveSitemap, serveSite, serveApp]
 
 /**
  * Декодирование пути запроса.

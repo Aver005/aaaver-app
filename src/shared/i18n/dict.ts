@@ -108,7 +108,7 @@ const ru = {
         consentClose: 'Понятно',
     },
     footer: {
-        builtWith: 'Собрано руками на React, Bun и SQLite',
+        builtWith: 'Собрано руками на React, Bun и Postgres',
         source: 'Исходники',
         rights: '© 2026 Артемий Аверьянов',
         top: 'Наверх',
@@ -220,7 +220,7 @@ const en: typeof ru = {
         consentClose: 'Understood',
     },
     footer: {
-        builtWith: 'Hand-built with React, Bun and SQLite',
+        builtWith: 'Hand-built with React, Bun and Postgres',
         source: 'Source code',
         rights: '© 2026 Artemiy Averyanov',
         top: 'Back to top',

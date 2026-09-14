@@ -20,7 +20,7 @@ function siteProxies(): Record<string, string> {
     }
 }
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
     plugins: [react(), tailwindcss()],
     resolve: {
         alias: {
@@ -37,12 +37,15 @@ export default defineConfig({
     build: {
         target: 'es2022',
         rollupOptions: {
-            output: {
-                manualChunks: {
-                    react: ['react', 'react-dom'],
-                    motion: ['motion'],
-                },
-            },
+            // пререндерный бандл держит react снаружи, резать его на чанки нечего
+            output: isSsrBuild
+                ? {}
+                : {
+                      manualChunks: {
+                          react: ['react', 'react-dom'],
+                          motion: ['motion'],
+                      },
+                  },
         },
     },
-})
+}))

@@ -1,53 +1,28 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useContext, useMemo, type ReactNode } from 'react'
 import { dictionaries, type Dict, type L10n, type Locale } from './dict'
-
-const STORAGE_KEY = 'aaaver-locale'
 
 interface I18nValue {
     locale: Locale
     t: Dict
     /** Достаёт строку текущего языка из двуязычного значения */
     lx: (value: L10n) => string
-    toggleLocale: () => void
 }
 
 const I18nContext = createContext<I18nValue | null>(null)
 
-function detectLocale(): Locale {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY)
-        if (saved === 'ru' || saved === 'en') return saved
-    } catch {
-        /* приватный режим — едем дальше */
-    }
-    const lang = navigator.language?.toLowerCase() ?? ''
-    return /^(ru|uk|be|kk)/.test(lang) ? 'ru' : 'en'
-}
-
-export function I18nProvider({ children }: { children: ReactNode }) {
-    const [locale, setLocale] = useState<Locale>(detectLocale)
-
-    const toggleLocale = useCallback(() => {
-        setLocale((prev) => {
-            const next: Locale = prev === 'ru' ? 'en' : 'ru'
-            try {
-                localStorage.setItem(STORAGE_KEY, next)
-            } catch {
-                /* ок */
-            }
-            document.documentElement.lang = next
-            return next
-        })
-    }, [])
-
+/**
+ * Язык приходит сверху, из адреса страницы, — не из localStorage и не из
+ * `navigator.language`. Иначе пререндер (который браузера не видит) и первый
+ * рендер в браузере разойдутся, а поисковик получит одну страницу на два языка.
+ */
+export function I18nProvider({ locale, children }: { locale: Locale; children: ReactNode }) {
     const value = useMemo<I18nValue>(
         () => ({
             locale,
             t: dictionaries[locale],
             lx: (v) => v[locale],
-            toggleLocale,
         }),
-        [locale, toggleLocale],
+        [locale],
     )
 
     return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>

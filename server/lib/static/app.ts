@@ -5,29 +5,43 @@ import type { StaticHandler } from './types'
 const DIST = fileURLToPath(new URL('../../../dist', import.meta.url))
 
 /**
- * Панель управления живёт в том же SPA, на роуте `/admin`, и приезжает тем же
- * `index.html`. Поисковикам она не нужна — а отдельного html, куда можно было
- * бы вписать мета-тег, у неё нет, поэтому запрет уезжает заголовком.
+ * Собранный фронтенд портфолио (см. scripts/prerender.ts).
+ *
+ * - `/` и `/en/` — пререндеренные `index.html` со всем текстом;
+ * - `/en` и `/index.html` — постоянный редирект на каноничный адрес со слэшем;
+ * - `/admin…` — пустая оболочка, React рисует панель сам;
+ * - любой другой путь без расширения — та же оболочка, но со статусом 404:
+ *   человек по битой ссылке всё равно видит портфолио, а поисковик не
+ *   принимает мусорный адрес за копию главной.
  */
-function noindexIfAdmin(pathname: string, res: Response): Response {
-    if (pathname === '/admin' || pathname.startsWith('/admin/')) {
-        res.headers.set('X-Robots-Tag', 'noindex')
+export const serveApp: StaticHandler = async ({ pathname, search }) => {
+    if (pathname.endsWith('/index.html')) {
+        return redirect(pathname.slice(0, -'index.html'.length) + search)
     }
-    return res
-}
 
-/** Собранный фронтенд портфолио; пути без расширения — SPA-фолбэк на index.html */
-export const serveApp: StaticHandler = async ({ pathname }) => {
-    const path = pathname === '/' ? '/index.html' : pathname
-
+    const path = pathname.endsWith('/') ? `${pathname}index.html` : pathname
     const file = await tryFile(safeJoin(DIST, path), cacheControl(path))
     if (file) return file
 
     // файл с расширением не нашёлся — честный 404 вместо html вместо картинки
     if (looksLikeFile(path)) return null
 
-    const index = await tryFile(safeJoin(DIST, 'index.html'), 'no-cache')
-    if (index) return noindexIfAdmin(pathname, index)
+    if (await Bun.file(safeJoin(DIST, `${pathname}/index.html`)).exists()) {
+        return redirect(`${pathname}/${search}`)
+    }
 
-    return new Response('dist/ не собран — выполните `bun run build`', { status: 404 })
+    const shell = await tryFile(safeJoin(DIST, 'shell.html'), 'no-cache')
+    if (!shell) return new Response('dist/ не собран — выполните `bun run build`', { status: 404 })
+
+    // Панели нужна своя страница, но не в поиске; noindex лежит и в самой оболочке
+    if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+        shell.headers.set('X-Robots-Tag', 'noindex')
+        return shell
+    }
+
+    return new Response(shell.body, { status: 404, headers: shell.headers })
+}
+
+function redirect(location: string): Response {
+    return new Response(null, { status: 308, headers: { Location: location } })
 }

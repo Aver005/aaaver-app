@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
-import { BrowserRouter, Route, Routes } from 'react-router'
-import { I18nProvider } from '@/shared/i18n'
+import { Route, Routes, useLocation } from 'react-router'
+import { I18nProvider, type Locale } from '@/shared/i18n'
+import { ORIGIN, PAGES, localeFromPath } from '@/shared/config/seo'
 import { Navbar } from '@/widgets/navbar'
 import { Footer } from '@/widgets/footer'
 import { HomePage } from '@/pages/home'
@@ -17,17 +18,42 @@ const AdminPage = lazy(() =>
     import('@/pages/admin').then((module) => ({ default: module.AdminPage })),
 )
 
+function setMeta(selector: string, attr: 'content' | 'href', value: string) {
+    document.head.querySelector(selector)?.setAttribute(attr, value)
+}
+
 /**
- * Всё, что не `/admin`, — портфолио.
+ * При первой загрузке head уже вписан пререндером; здесь он догоняет
+ * переключение языка без перезагрузки.
+ */
+function useDocumentHead(locale: Locale) {
+    useEffect(() => {
+        const page = PAGES[locale]
+        const url = ORIGIN + page.path
+        document.documentElement.lang = locale
+        document.title = page.title
+        setMeta('meta[name="description"]', 'content', page.description)
+        setMeta('link[rel="canonical"]', 'href', url)
+        setMeta('meta[property="og:url"]', 'content', url)
+        setMeta('meta[property="og:title"]', 'content', page.title)
+        setMeta('meta[property="og:description"]', 'content', page.description)
+        setMeta('meta[property="og:locale"]', 'content', page.ogLocale)
+    }, [locale])
+}
+
+/**
+ * Всё, что не `/admin`, — портфолио; `/en/…` — его английская версия.
  *
- * Звёздочка, а не только `/`: сервер отдаёт `index.html` на любой путь без
- * расширения (SPA-фолбэк), и до появления роутера такой путь показывал
- * портфолио. Так и оставляем — иначе чужая ссылка на несуществующий раздел
- * начала бы отдавать пустой экран вместо главной.
+ * Один маршрут на оба языка, чтобы смена языка не пересоздавала страницу
+ * и не проигрывала анимации появления заново. Неизвестный путь тоже
+ * показывает портфолио, но сервер отвечает на него статусом 404.
  */
 function Portfolio() {
+    const locale = localeFromPath(useLocation().pathname)
+    useDocumentHead(locale)
+
     return (
-        <I18nProvider>
+        <I18nProvider locale={locale}>
             <MotionConfig reducedMotion="user">
                 <div className="grain relative min-h-svh">
                     <Navbar />
@@ -39,20 +65,19 @@ function Portfolio() {
     )
 }
 
+/** Роутер снаружи: в браузере `BrowserRouter` (main.tsx), при пререндере `StaticRouter` */
 export function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route
-                    path="/admin/*"
-                    element={
-                        <Suspense fallback={<div className="min-h-svh bg-ink" />}>
-                            <AdminPage />
-                        </Suspense>
-                    }
-                />
-                <Route path="*" element={<Portfolio />} />
-            </Routes>
-        </BrowserRouter>
+        <Routes>
+            <Route
+                path="/admin/*"
+                element={
+                    <Suspense fallback={<div className="min-h-svh bg-ink" />}>
+                        <AdminPage />
+                    </Suspense>
+                }
+            />
+            <Route path="*" element={<Portfolio />} />
+        </Routes>
     )
 }

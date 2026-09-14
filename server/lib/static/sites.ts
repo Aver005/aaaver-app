@@ -13,9 +13,10 @@ import type { StaticHandler } from './types'
 /**
  * Имена, занятые самим портфолио, — такой слаг демке не достанется.
  * `admin` здесь потому, что обработчик демок пробуется ПЕРВЫМ: без брони
- * папка `sites/admin/` перекрыла бы панель управления собой.
+ * папка `sites/admin/` перекрыла бы панель управления собой. `en` — английская
+ * версия портфолио.
  */
-export const RESERVED = new Set(['api', 'assets', 'projects', 'admin'])
+export const RESERVED = new Set(['api', 'assets', 'projects', 'admin', 'en'])
 
 export const SLUG_RE = /^[a-z0-9-]+$/
 
